@@ -41,12 +41,21 @@
     function init() {
         populateForm();
         applyConfiguration();
-        attachEventListeners();
         
-        // If it's a shared portfolio, hide the editor by default
+        // If it's a shared portfolio, completely hide the editor
         if (hasSharedConfig) {
-            editorPanel.classList.add('collapsed');
-            floatBtn.style.display = 'block';
+            editorPanel.style.display = 'none';
+            floatBtn.style.display = 'none';
+            if (openEditorBtn) {
+                openEditorBtn.style.display = 'none';
+            }
+            // Update badge to show it's a portfolio
+            const badge = document.querySelector('.template-badge span');
+            if (badge) {
+                badge.textContent = '👤 Portfolio';
+            }
+        } else {
+            attachEventListeners();
         }
     }
 
