@@ -1,4 +1,116 @@
-/* Editor Panel Styles */
+/* Onboarding Overlay */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.onboarding-overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.onboarding-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 90%;
+    padding: 3rem;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.onboarding-step {
+    display: none;
+    text-align: center;
+}
+
+.onboarding-step.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+.onboarding-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.onboarding-modal h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.onboarding-modal p {
+    font-size: 1.05rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.onboarding-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-onboarding,
+.btn-onboarding-skip {
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-onboarding {
+    background: #0f172a;
+    color: white;
+}
+
+.btn-onboarding:hover {
+    background: #334155;
+    transform: translateY(-2px);
+}
+
+.btn-onboarding-skip {
+    background: transparent;
+    color: #64748b;
+}
+
+.btn-onboarding-skip:hover {
+    color: #0f172a;
+}
+
+/* Editor Panel */
 .editor-container {
     position: relative;
 }
@@ -7,10 +119,10 @@
     position: fixed;
     right: 0;
     top: 0;
-    width: 420px;
+    width: 380px;
     height: 100vh;
-    background: white;
-    box-shadow: -10px 0 50px rgba(0, 0, 0, 0.15);
+    background: #fdfbf7;
+    border-left: 1px solid rgba(15, 23, 42, 0.08);
     z-index: 2000;
     overflow-y: auto;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -23,63 +135,276 @@
 .editor-header {
     position: sticky;
     top: 0;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    background-size: 200% 200%;
-    animation: headerGradient 8s ease infinite;
-    color: white;
-    padding: 1.75rem;
+    background: white;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 1.25rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 10;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
 }
 
-@keyframes headerGradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+.editor-branding {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.editor-logo {
+    font-size: 1.5rem;
 }
 
 .editor-header h2 {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #0f172a;
+    letter-spacing: -0.01em;
 }
 
-.editor-toggle {
-    background: rgba(255, 255, 255, 0.2);
+.editor-close {
+    background: transparent;
     border: none;
-    color: white;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+    color: #64748b;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.editor-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(90deg);
+.editor-close:hover {
+    background: rgba(15, 23, 42, 0.05);
+    color: #0f172a;
+}
+
+.editor-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    background: white;
+    position: sticky;
+    top: 67px;
+    z-index: 9;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tab-btn:hover {
+    color: #0f172a;
+    background: rgba(15, 23, 42, 0.02);
+}
+
+.tab-btn.active {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #0f172a;
 }
 
 .editor-content {
-    padding: 1.5rem;
+    padding: 0;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
 }
 
 .editor-section {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 2px solid #f3f4f6;
-    animation: fadeInUp 0.5s ease-out;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
-@keyframes fadeInUp {
+.editor-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.section-title h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.section-hint {
+    font-size: 0.75rem;
+    color: #64748b;
+    background: rgba(15, 23, 42, 0.05);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background: white;
+    color: #0f172a;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0f172a;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.05);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #94a3b8;
+}
+
+.input-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 0.4rem;
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.color-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 6px;
+    padding: 6px;
+}
+
+.color-input-wrapper input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.color-value {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-family: 'Courier New', monospace;
+}
+
+.editor-actions {
+    padding: 1.5rem;
+    background: white;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
+    position: sticky;
+    bottom: 0;
+}
+
+.editor-actions .btn {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-primary {
+    background: #0f172a;
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.btn-primary:hover {
+    background: #334155;
+    transform: translateY(-1px);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: #64748b;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+}
+
+.btn-ghost:hover {
+    border-color: rgba(15, 23, 42, 0.2);
+    color: #0f172a;
+}
+
+.action-menu {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.link-result {
+    padding: 1.5rem;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    margin-top: 1rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-10px);
     }
     to {
         opacity: 1;
@@ -87,189 +412,34 @@
     }
 }
 
-.editor-section:last-of-type {
-    border-bottom: none;
-}
-
-.editor-section h3 {
-    font-size: 1.1rem;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
-
-.editor-content .form-group {
-    margin-bottom: 1rem;
-}
-
-.editor-content .form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.5rem;
-}
-
-.editor-content .form-group input,
-.editor-content .form-group textarea {
-    width: 100%;
-    padding: 0.875rem;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: #fafafa;
-}
-
-.editor-content .form-group input:focus,
-.editor-content .form-group textarea:focus {
-    outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-    background: white;
-    transform: translateY(-1px);
-}
-
-.editor-content .form-group input[type="color"] {
-    height: 45px;
-    cursor: pointer;
-}
-
-.editor-actions {
+.result-header {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 0.75rem;
-    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
-.editor-actions .btn {
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.editor-actions .btn:active {
-    transform: scale(0.98);
-}
-
-.link-result {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: #f0fdf4;
-    border: 2px solid #86efac;
-    border-radius: 10px;
-}
-
-.link-result label {
-    display: block;
-    font-weight: 600;
-    color: #166534;
-    margin-bottom: 0.5rem;
-}
-
-.link-box {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.link-box input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #86efac;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    background: white;
-}
-
-.btn-copy {
-    padding: 0.5rem 1rem;
+.result-icon {
+    width: 32px;
+    height: 32px;
     background: #22c55e;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-    transition: all 0.3s ease;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
-.btn-copy:hover {
-    background: #16a34a;
-}
-
-.link-hint {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: #166534;
-    margin-bottom: 0;
-}
-
-.editor-float-btn {
-    position: fixed;
-    right: 20px;
-    top: 100px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    border: none;
-    padding: 1.1rem 1.75rem;
-    border-radius: 50px;
+.result-header h4 {
+    margin: 0;
     font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
-    z-index: 1999;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: floatPulse 3s ease-in-out infinite;
+    color: #0f172a;
 }
 
-@keyframes floatPulse {
-    0%, 100% {
-        transform: translateY(0);
-        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
-    }
-    50% {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(99, 102, 241, 0.45);
-    }
-}
-
-.editor-float-btn:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 20px 50px rgba(99, 102, 241, 0.5);
-    animation: none;
-}
-
-/* Adjust main content when editor is open */
-body.editor-open {
-    padding-right: 0;
-}
-
-/* Mobile Responsiveness */
+/* Responsive */
 @media (max-width: 768px) {
     .editor-panel {
         width: 100%;
     }
-
-    .editor-float-btn {
-        right: 15px;
-        top: 80px;
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* Smooth transitions for live preview */
-.hero-title .name,
-.hero-subtitle,
-.hero-description,
-.about-text h3,
-.about-text p,
-.skill-tag,
-.contact-item a,
-.footer p {
-    transition: all 0.3s ease;
 }

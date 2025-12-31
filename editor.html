@@ -3,101 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Template Editor</title>
+    <title>Portfolio Builder - Editor</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="editor-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Onboarding Overlay -->
+    <div class="onboarding-overlay" id="onboardingOverlay">
+        <div class="onboarding-modal">
+            <div class="onboarding-step active" data-step="1">
+                <div class="onboarding-icon">👋</div>
+                <h2>Welcome to your portfolio builder</h2>
+                <p>In the next 3 minutes, you'll have a live portfolio ready to share. No sign up needed.</p>
+                <div class="onboarding-actions">
+                    <button class="btn-onboarding" onclick="nextOnboardingStep()">Let's go →</button>
+                </div>
+            </div>
+            
+            <div class="onboarding-step" data-step="2">
+                <div class="onboarding-icon">✏️</div>
+                <h2>Edit on the left</h2>
+                <p>Type your info in the sidebar. Everything updates live on the right side.</p>
+                <div class="onboarding-actions">
+                    <button class="btn-onboarding-skip" onclick="skipOnboarding()">Skip</button>
+                    <button class="btn-onboarding" onclick="nextOnboardingStep()">Got it →</button>
+                </div>
+            </div>
+            
+            <div class="onboarding-step" data-step="3">
+                <div class="onboarding-icon">🔗</div>
+                <h2>Share your link</h2>
+                <p>When you're done, click "Generate Link" to get a URL you can share anywhere.</p>
+                <div class="onboarding-actions">
+                    <button class="btn-onboarding" onclick="closeOnboarding()">Start editing →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Editor Panel -->
     <div class="editor-container">
         <div class="editor-panel" id="editorPanel">
             <div class="editor-header">
-                <h2>✏️ Customize Your Portfolio</h2>
-                <button class="editor-toggle" id="editorToggle">
-                    <span id="toggleIcon">✕</span>
+                <div class="editor-branding">
+                    <span class="editor-logo">🎨</span>
+                    <h2>Editor</h2>
+                </div>
+                <button class="editor-close" id="editorToggle" title="Toggle Editor">
+                    <span id="toggleIcon">←</span>
                 </button>
             </div>
             
             <div class="editor-content">
-                <div class="editor-section">
-                    <h3>Personal Information</h3>
-                    <div class="form-group">
-                        <label>Your Name</label>
-                        <input type="text" id="edit-name" placeholder="John Doe">
+                <div class="editor-tabs">
+                    <button class="tab-btn active" data-tab="basic">Basics</button>
+                    <button class="tab-btn" data-tab="about">About</button>
+                    <button class="tab-btn" data-tab="style">Style</button>
+                </div>
+
+                <div class="tab-content active" data-content="basic">
+                    <div class="editor-section">
+                        <div class="section-title">
+                            <h3>Your Info</h3>
+                            <span class="section-hint">Start here</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="edit-name" placeholder="Jane Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="edit-title" placeholder="Product Designer">
+                        </div>
+                        <div class="form-group">
+                            <label>Tagline</label>
+                            <input type="text" id="edit-description" placeholder="Creating beautiful digital experiences">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Your Title</label>
-                        <input type="text" id="edit-title" placeholder="Creative Designer">
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="edit-description" rows="2"></textarea>
+
+                    <div class="editor-section">
+                        <div class="section-title">
+                            <h3>Contact</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="edit-email" placeholder="jane@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone (optional)</label>
+                            <input type="tel" id="edit-phone" placeholder="+1 234 567 8900">
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="edit-location" placeholder="San Francisco, CA">
+                        </div>
                     </div>
                 </div>
 
-                <div class="editor-section">
-                    <h3>About Section</h3>
-                    <div class="form-group">
-                        <label>Heading</label>
-                        <input type="text" id="edit-about-heading" placeholder="Creative Professional">
-                    </div>
-                    <div class="form-group">
-                        <label>Bio (Paragraph 1)</label>
-                        <textarea id="edit-bio1" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Bio (Paragraph 2)</label>
-                        <textarea id="edit-bio2" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Skills (comma separated)</label>
-                        <input type="text" id="edit-skills" placeholder="Design, Development, Photography">
-                    </div>
-                </div>
-
-                <div class="editor-section">
-                    <h3>Contact Information</h3>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="edit-email" placeholder="your@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Phone</label>
-                        <input type="tel" id="edit-phone" placeholder="+123 456 7890">
-                    </div>
-                    <div class="form-group">
-                        <label>Location</label>
-                        <input type="text" id="edit-location" placeholder="Your City, Country">
+                <div class="tab-content" data-content="about">
+                    <div class="editor-section">
+                        <div class="section-title">
+                            <h3>Tell your story</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>Headline</label>
+                            <input type="text" id="edit-about-heading" placeholder="About Me">
+                        </div>
+                        <div class="form-group">
+                            <label>First paragraph</label>
+                            <textarea id="edit-bio1" rows="4" placeholder="Write about your background, passion, or what drives you..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Second paragraph (optional)</label>
+                            <textarea id="edit-bio2" rows="4" placeholder="Share more about your experience or interests..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Skills</label>
+                            <input type="text" id="edit-skills" placeholder="UI Design, Figma, React, Branding">
+                            <span class="input-hint">Separate with commas</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="editor-section">
-                    <h3>Colors</h3>
-                    <div class="form-group">
-                        <label>Primary Color</label>
-                        <input type="color" id="edit-primary-color" value="#6366f1">
-                    </div>
-                    <div class="form-group">
-                        <label>Secondary Color</label>
-                        <input type="color" id="edit-secondary-color" value="#8b5cf6">
+                <div class="tab-content" data-content="style">
+                    <div class="editor-section">
+                        <div class="section-title">
+                            <h3>Brand Colors</h3>
+                        </div>
+                        <div class="color-grid">
+                            <div class="form-group">
+                                <label>Primary</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="edit-primary-color" value="#6366f1">
+                                    <span class="color-value">#6366f1</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Accent</label>
+                                <div class="color-input-wrapper">
+                                    <input type="color" id="edit-secondary-color" value="#8b5cf6">
+                                    <span class="color-value">#8b5cf6</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="editor-actions">
                     <button class="btn btn-primary" id="generateLink">
-                        🔗 Get Your Portfolio Link
+                        Generate Link →
                     </button>
-                    <button class="btn btn-secondary" id="downloadConfig">
-                        💾 Download Config
-                    </button>
-                    <button class="btn btn-secondary" id="resetConfig">
-                        🔄 Reset
-                    </button>
+                    <div class="action-menu">
+                        <button class="btn btn-ghost" id="resetConfig">Reset</button>
+                    </div>
                 </div>
 
                 <div class="link-result" id="linkResult" style="display: none;">
-                    <label>Your Portfolio Link:</label>
+                    <div class="result-header">
+                        <span class="result-icon">✓</span>
+                        <h4>Your portfolio is ready!</h4>
+                    </div>
                     <div class="link-box">
                         <input type="text" id="generatedLink" readonly>
                         <button class="btn-copy" id="copyLink">📋 Copy</button>

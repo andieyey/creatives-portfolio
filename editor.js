@@ -9,6 +9,87 @@
     // Load configuration from URL or localStorage or default
     let currentConfig = loadConfiguration();
 
+    // Onboarding
+    let currentStep = 1;
+    const onboardingOverlay = document.getElementById('onboardingOverlay');
+    
+    // Show onboarding if first visit and not shared
+    if (!hasSharedConfig && !localStorage.getItem('onboardingCompleted')) {
+        showOnboarding();
+    } else if (onboardingOverlay) {
+        onboardingOverlay.classList.add('hidden');
+    }
+    
+    window.nextOnboardingStep = function() {
+        const steps = document.querySelectorAll('.onboarding-step');
+        steps[currentStep - 1].classList.remove('active');
+        currentStep++;
+        if (currentStep <= steps.length) {
+            steps[currentStep - 1].classList.add('active');
+        }
+    };
+    
+    window.skipOnboarding = function() {
+        closeOnboarding();
+    };
+    
+    window.closeOnboarding = function() {
+        if (onboardingOverlay) {
+            onboardingOverlay.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                onboardingOverlay.classList.add('hidden');
+                localStorage.setItem('onboardingCompleted', 'true');
+            }, 300);
+        }
+    };
+    
+    function showOnboarding() {
+        if (onboardingOverlay) {
+            onboardingOverlay.classList.remove('hidden');
+        }
+    }
+
+    // Tab functionality
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabName = btn.dataset.tab;
+            
+            // Update buttons
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Update content
+            tabContents.forEach(content => {
+                if (content.dataset.content === tabName) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        });
+    });
+    
+    // Color input listeners
+    const primaryColorInput = document.getElementById('edit-primary-color');
+    const secondaryColorInput = document.getElementById('edit-secondary-color');
+    
+    if (primaryColorInput) {
+        const primaryValue = primaryColorInput.nextElementSibling;
+        primaryColorInput.addEventListener('input', (e) => {
+            if (primaryValue) primaryValue.textContent = e.target.value;
+        });
+    }
+    
+    if (secondaryColorInput) {
+        const secondaryValue = secondaryColorInput.nextElementSibling;
+        secondaryColorInput.addEventListener('input', (e) => {
+            if (secondaryValue) secondaryValue.textContent = e.target.value;
+        });
+    }
+
     // Editor elements
     const editorPanel = document.getElementById('editorPanel');
     const editorToggle = document.getElementById('editorToggle');
