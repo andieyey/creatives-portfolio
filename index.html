@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Creative Portfolio - Showcasing innovative work and projects">
-    <title>Creative Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Create your professional portfolio in minutes. Free, easy-to-use portfolio builder with customizable templates.">
+    <title>Portfolio Builder - Create Your Professional Portfolio in Minutes</title>
+    <link rel="stylesheet" href="landing-styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <a href="#home">Portfolio</a>
+                <span class="logo-icon">🎨</span>
+                <span class="logo-text">PortfolioBuilder</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#showcase" class="nav-link">Examples</a></li>
             </ul>
-            <a href="editor.html" class="btn-download">
-                Try Live Editor
-            </a>
+            <a href="editor.html" class="btn-cta">Start Building Free</a>
             <div class="hamburger">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -35,223 +33,216 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="template-badge">
-                <span>🎨 Free Portfolio Template</span>
-            </div>
-            <h1 class="hero-title">
-                <span class="greeting">Hi, I'm</span>
-                <span class="name">Your Name</span>
-            </h1>
-            <p class="hero-subtitle">Creative Designer & Developer</p>
-            <p class="hero-description">Crafting beautiful digital experiences through design and code</p>
-            <div class="hero-buttons">
-                <a href="editor.html" class="btn btn-primary">✏️ Try Live Editor</a>
-                <a href="#portfolio" class="btn btn-secondary">View Demo</a>
-            </div>
+    <section class="hero-landing">
+        <div class="hero-bg-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
         </div>
-        <div class="hero-image">
-            <div class="hero-shape"></div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-placeholder">
-                        <span>Your Photo</span>
-                    </div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>✨ 100% Free • No Sign Up Required</span>
                 </div>
-                <div class="about-text">
-                    <h3>Creative Professional</h3>
-                    <p>I'm a passionate creative professional with expertise in design and development. I love bringing ideas to life through innovative solutions and beautiful designs.</p>
-                    <p>With years of experience in the creative industry, I've worked on diverse projects ranging from branding to web development, always pushing the boundaries of what's possible.</p>
-                    <div class="skills">
-                        <h4>Skills</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">UI/UX Design</span>
-                            <span class="skill-tag">Web Development</span>
-                            <span class="skill-tag">Graphic Design</span>
-                            <span class="skill-tag">Branding</span>
-                            <span class="skill-tag">Photography</span>
-                            <span class="skill-tag">Video Editing</span>
-                        </div>
+                <h1 class="hero-heading">
+                    Build Your Perfect
+                    <span class="gradient-text">Portfolio</span>
+                    in Minutes
+                </h1>
+                <p class="hero-subheading">
+                    Create a stunning, professional portfolio website without any coding. 
+                    Customize everything with our intuitive editor, get a shareable link instantly.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="editor.html" class="btn-hero-primary">
+                        <span>🚀 Start Building Now</span>
+                    </a>
+                    <a href="#how-it-works" class="btn-hero-secondary">
+                        <span>See How It Works</span>
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Free Forever</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3 Min</div>
+                        <div class="stat-label">Setup Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">No Code</div>
+                        <div class="stat-label">Required</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <h2 class="section-title">My Portfolio</h2>
-            <p class="section-subtitle">A selection of my recent work</p>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 1</div>
+            <div class="hero-preview">
+                <div class="preview-window">
+                    <div class="preview-header">
+                        <span class="preview-dot"></span>
+                        <span class="preview-dot"></span>
+                        <span class="preview-dot"></span>
                     </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 1</h3>
-                        <p>Brand Identity & Web Design</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 2</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 2</h3>
-                        <p>UI/UX Design</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 3</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 3</h3>
-                        <p>Web Development</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 4</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 4</h3>
-                        <p>Graphic Design</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 5</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 5</h3>
-                        <p>Photography</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <div class="portfolio-image">
-                        <div class="image-placeholder">Project 6</div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Project Title 6</h3>
-                        <p>Video Production</p>
-                        <a href="#" class="portfolio-link">View Project →</a>
+                    <div class="preview-content">
+                        <img src="https://via.placeholder.com/600x400/667eea/ffffff?text=Your+Portfolio+Preview" alt="Portfolio Preview">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <!-- Features Section -->
+    <section id="features" class="features-section">
         <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <p class="section-subtitle">Let's create something amazing together</p>
-            
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <h3>📧 Email</h3>
-                        <p><a href="mailto:your.email@example.com">your.email@example.com</a></p>
+            <div class="section-header">
+                <h2 class="section-title">Everything You Need</h2>
+                <p class="section-subtitle">Powerful features that make portfolio building effortless</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✏️</div>
+                    <h3>Live Editor</h3>
+                    <p>Edit your portfolio in real-time. See changes instantly as you type.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Instant Sharing</h3>
+                    <p>Get a unique shareable link. No hosting or deployment needed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Full Customization</h3>
+                    <p>Change colors, content, and layout to match your personal brand.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Responsive</h3>
+                    <p>Your portfolio looks perfect on any device, automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Optimized for speed. Your portfolio loads in milliseconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>No Sign Up</h3>
+                    <p>Start creating immediately. No account or email required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-subtitle">Get your portfolio online in three simple steps</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Open the Editor</h3>
+                        <p>Click "Start Building" and you'll see our intuitive live editor. No installation needed.</p>
                     </div>
-                    <div class="contact-item">
-                        <h3>📱 Phone</h3>
-                        <p><a href="tel:+1234567890">+123 456 7890</a></p>
-                    </div>
-                    <div class="contact-item">
-                        <h3>📍 Location</h3>
-                        <p>Your City, Country</p>
-                    </div>
-                    <div class="contact-item">
-                        <h3>🌐 Social</h3>
-                        <div class="social-links">
-                            <a href="#" target="_blank">LinkedIn</a>
-                            <a href="#" target="_blank">GitHub</a>
-                            <a href="#" target="_blank">Dribbble</a>
-                            <a href="#" target="_blank">Instagram</a>
+                    <div class="step-visual">
+                        <div class="visual-box">
+                            <span class="visual-icon">🖱️</span>
                         </div>
                     </div>
                 </div>
-
-                <form class="contact-form">
-                    <div class="form-group">
-                        <input type="text" placeholder="Your Name" required>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Customize Your Portfolio</h3>
+                        <p>Add your name, projects, skills, and contact info. Change colors to match your style.</p>
                     </div>
-                    <div class="form-group">
-                        <input type="email" placeholder="Your Email" required>
+                    <div class="step-visual">
+                        <div class="visual-box">
+                            <span class="visual-icon">✨</span>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="text" placeholder="Subject">
-                    </div>
-                    <div class="form-group">
-                        <textarea placeholder="Your Message" rows="5" required></textarea>
-              
-
-    <!-- Template Info Section -->
-    <section class="template-info">
-        <div class="container">
-            <div class="template-info-content">
-                <div class="template-info-text">
-                    <h2>💡 Love This Design?</h2>
-                    <p>This is a free, fully customizable portfolio template! Perfect for designers, developers, and creative professionals.</p>
-                    <ul class="template-features">
-                        <li>✅ 100% Free & Open Source</li>
-                        <li>✅ Easy to Customize (just edit config.js)</li>
-                        <li>✅ Fully Responsive Design</li>
-                        <li>✅ No Coding Skills Required</li>
-                        <li>✅ Ready to Deploy</li>
-                    </ul>
                 </div>
-                <div class="template-info-actions">
-                    <h3>Get Started in 3 Steps:</h3>
-                    <div class="template-steps">
-                        <div class="template-step">
-                            <span class="step-number">1</span>
-                            <p>Download the template</p>
-                        </div>
-                        <div class="template-step">
-                            <span class="step-number">2</span>
-                            <p>Edit config.js with your info</p>
-                        </div>
-                        <div class="template-step">
-                            <span class="step-number">3</span>
-                            <p>Open index.html - Done!</p>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Share Your Link</h3>
+                        <p>Click "Get Link" and share your portfolio URL anywhere. It's that easy!</p>
+                    </div>
+                    <div class="step-visual">
+                        <div class="visual-box">
+                            <span class="visual-icon">🚀</span>
                         </div>
                     </div>
-                    <div class="template-buttons">
-                        <a href="portfolio-template.zip" class="btn btn-primary btn-large" download="creative-portfolio-template.zip">
-                            📥 Download Template
-                        </a>editor.html" class="btn btn-primary btn-large">
-                            ✏️ Try Live Editorcom/andieyey/creatives-portfolio" class="btn btn-secondary btn-large" target="_blank">
-                            👀 View on GitHub
-                        </a>
+                </div>
+            </div>
+            <div class="cta-center">
+                <a href="editor.html" class="btn-large-primary">Start Building Your Portfolio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase Section -->
+    <section id="showcase" class="showcase-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Beautiful Templates</h2>
+                <p class="section-subtitle">Professional designs ready to customize</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="showcase-card">
+                    <div class="showcase-image">
+                        <div class="showcase-overlay">
+                            <a href="template.html" class="btn-view-demo">View Demo</a>
+                        </div>
+                        <img src="https://via.placeholder.com/400x300/667eea/ffffff?text=Creative+Portfolio" alt="Creative Portfolio">
+                    </div>
+                    <div class="showcase-info">
+                        <h3>Creative Portfolio</h3>
+                        <p>Perfect for designers, artists, and creative professionals</p>
+                    </div>
+                </div>
+                <div class="showcase-card">
+                    <div class="showcase-image">
+                        <div class="showcase-overlay">
+                            <a href="editor.html" class="btn-view-demo">Customize This</a>
+                        </div>
+                        <img src="https://via.placeholder.com/400x300/8b5cf6/ffffff?text=Developer+Portfolio" alt="Developer Portfolio">
+                    </div>
+                    <div class="showcase-info">
+                        <h3>Developer Portfolio</h3>
+                        <p>Ideal for programmers and tech professionals</p>
+                    </div>
+                </div>
+                <div class="showcase-card coming-soon">
+                    <div class="showcase-image">
+                        <div class="coming-soon-badge">Coming Soon</div>
+                        <img src="https://via.placeholder.com/400x300/ec4899/ffffff?text=More+Templates" alt="More Templates">
+                    </div>
+                    <div class="showcase-info">
+                        <h3>More Templates</h3>
+                        <p>New designs coming soon</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>      </div>
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </form>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Showcase Your Work?</h2>
+                <p>Join creative professionals who chose the easiest way to build their portfolio</p>
+                <a href="editor.html" class="btn-cta-large">
+                    <span>Create Your Portfolio Now</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+                <p class="cta-note">✨ Free forever • No credit card required • Ready in 3 minutes</p>
             </div>
         </div>
     </section>
@@ -259,11 +250,39 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Your Name. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🎨</span>
+                        <span class="logo-text">PortfolioBuilder</span>
+                    </div>
+                    <p>Build beautiful portfolios in minutes</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="editor.html">Portfolio Editor</a></li>
+                            <li><a href="template.html">Templates</a></li>
+                            <li><a href="#features">Features</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="README.md">Documentation</a></li>
+                            <li><a href="QUICK-START.md">Quick Start</a></li>
+                            <li><a href="https://github.com/andieyey/creatives-portfolio">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PortfolioBuilder. Open Source & Free Forever.</p>
+            </div>
         </div>
     </footer>
 
-    <script src="config.js"></script>
-    <script src="script.js"></script>
+    <script src="landing-script.js"></script>
 </body>
 </html>
