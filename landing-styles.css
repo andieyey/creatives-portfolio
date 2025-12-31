@@ -21,13 +21,13 @@ html {
     scroll-behavior: smooth;
 }
 
-body {7;
-    overflow-x: hidden;
-    background: var(--cream);
-    letter-spacing: -0.01emins', sans-serif;
+body {
+    font-family: 'Poppins', sans-serif;
     color: var(--dark);
     line-height: 1.6;
     overflow-x: hidden;
+    background: var(--cream);
+    letter-spacing: -0.01em;
 }
 
 .container {
@@ -39,10 +39,11 @@ body {7;
 /* Navigation */
 .navbar {
     position: fixed;
-    top: 0;3, 251, 247, 0.95);
+    top: 0;
+    width: 100%;
+    background: rgba(253, 251, 247, 0.95);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(15, 23, 42, 0.08
-    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
     z-index: 1000;
     transition: all 0.3s ease;
@@ -58,15 +59,15 @@ body {7;
 }
 
 .logo {
-    display75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--dark);
     letter-spacing: -0.02em;
 }
 
-.logo-icon {
-    font-size: 1.5
 .logo-icon {
     font-size: 1.8rem;
 }
@@ -75,7 +76,10 @@ body {7;
     display: flex;
     list-style: none;
     gap: 2.5rem;
-}secondary);
+}
+
+.nav-link {
+    color: var(--secondary);
     text-decoration: none;
     font-weight: 400;
     font-size: 0.95rem;
@@ -84,7 +88,8 @@ body {7;
 }
 
 .nav-link:hover {
-    color: var(--dark)
+    color: var(--dark);
+}
 
 .nav-link:hover::after {
     width: 100%;
@@ -92,13 +97,6 @@ body {7;
 
 .btn-cta {
     padding: 10px 24px;
-    background: var(--gradient);
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
-    font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 48px;
     background: var(--dark);
     color: white;
     text-decoration: none;
@@ -110,7 +108,13 @@ body {7;
 
 .btn-cta:hover {
     background: var(--secondary);
-    transform: translateY(-1px
+    transform: translateY(-1px);
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
 
 .hamburger .bar {
     width: 25px;
@@ -126,15 +130,6 @@ body {7;
     display: flex;
     align-items: center;
     padding: 120px 20px 80px;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-.hero-bg-shapes {
-    position: absolute;
-    width: 100%;
-    height: 1040px 20px 100px;
     position: relative;
     overflow: hidden;
     background: var(--white);
