@@ -255,6 +255,41 @@
         // Update footer
         document.querySelector('.footer p').textContent = `© ${new Date().getFullYear()} ${currentConfig.name}. All rights reserved.`;
         
+        // Update projects
+        const portfolioGrid = document.querySelector('.portfolio-grid');
+        if (portfolioGrid && currentConfig.projects) {
+            portfolioGrid.innerHTML = '';
+            currentConfig.projects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'portfolio-item';
+                
+                const imageHtml = project.image 
+                    ? `<img src="${project.image}" alt="${project.title}">`
+                    : `<div class="project-placeholder" style="background: linear-gradient(135deg, ${currentConfig.colors.primary} 0%, ${currentConfig.colors.secondary} 100%);"></div>`;
+                
+                const linkAttr = project.link && project.link !== '#' 
+                    ? `href="${project.link}" target="_blank" rel="noopener noreferrer"` 
+                    : 'href="#"';
+                
+                projectCard.innerHTML = `
+                    <a ${linkAttr}>
+                        <div class="portfolio-image">
+                            ${imageHtml}
+                            <div class="portfolio-overlay">
+                                <span class="view-project">View Project →</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>${project.title || 'Untitled Project'}</h3>
+                            <p>${project.category || 'Uncategorized'}</p>
+                        </div>
+                    </a>
+                `;
+                
+                portfolioGrid.appendChild(projectCard);
+            });
+        }
+        
         // Apply colors
         document.documentElement.style.setProperty('--primary-color', currentConfig.colors.primary);
         document.documentElement.style.setProperty('--secondary-color', currentConfig.colors.secondary);
