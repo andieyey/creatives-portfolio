@@ -105,13 +105,42 @@ body {
     transition: var(--transition);
 }
 
+.btn-download {
+    padding: 8px 20px;
+    background: var(--primary-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.btn-download:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
     display: flex;
     align-items: center;
     padding: 100px 20px 60px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ template-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: var(--white);
     position: relative;
     overflow: hidden;
@@ -446,7 +475,132 @@ body {
     width: 100%;
     border: none;
     cursor: pointer;
+   Template Info Section */
+.template-info {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+    padding: 80px 20px;
+}
+btn-download {
+        display: none;
+    }
+
+    .
+.template-info-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.template-info-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.template-info-text p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.template-features {
+    list-style: none;
+    padding: 0;
+}
+
+.template-features li {
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    opacity: 0.95;
+}
+
+.template-info-actions {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.template-info-actions h3 {
+
+    .template-info-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .template-steps {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.template-steps {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.template-step {
+    flex: 1;
+    text-align: center;
+}
+
+.step-number {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: var(--white);
+    color: var(--primary-color);
+    border-radius: 50%;
+    line-height: 40px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.template-step p {
+    font-size: 0.9rem;
+    opacity: 0.95;
+}
+
+.template-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btn-large {
+    padding: 15px 32px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.template-info .btn-primary {
+    background: var(--white);
+    color: var(--primary-color);
+}
+
+.template-info .btn-primary:hover {
+    background: var(--light-color);
+}
+
+.template-info .btn-secondary {
+    background: transparent;
+    border: 2px solid var(--white);
+}
+
+.template-info .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/*  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: var(--white);
 }
 
