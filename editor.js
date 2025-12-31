@@ -118,6 +118,15 @@
         secondaryColor: document.getElementById('edit-secondary-color')
     };
 
+    // Projects management
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    const projectsList = document.getElementById('projectsList');
+    let projects = [];
+    
+    if (addProjectBtn) {
+        addProjectBtn.addEventListener('click', addNewProject);
+    }
+
     // Initialize
     function init() {
         populateForm();
@@ -378,6 +387,186 @@
         setTimeout(() => {
             copyLinkBtn.textContent = originalText;
         }, 2000);
+    }
+
+    // ===== PROJECTS MANAGEMENT =====
+    
+    function addNewProject() {
+        const projectId = Date.now();
+        const project = {
+            id: projectId,
+            title: '',
+            category: '',
+            image: '',
+            link: ''
+        };
+        
+        projects.push(project);
+        renderProject(project, projects.length - 1);
+        updateProjectsInConfig();
+    }
+    
+    function renderProject(project, index) {
+        const projectItem = document.createElement('div');
+        projectItem.className = 'project-item';
+        projectItem.dataset.projectId = project.id;
+        
+        projectItem.innerHTML = `
+            <div class="project-header">
+                <span class="project-number">Project ${index + 1}</span>
+                <div class="project-actions">
+                    <button class="btn-icon toggle" onclick="toggleProject(${project.id})" title="Collapse/Expand">−</button>
+                    <button class="btn-icon delete" onclick="deleteProject(${project.id})" title="Delete">×</button>
+                </div>
+            </div>
+            <div class="project-fields">
+                <div class="form-group">
+                    <label>Project Title</label>
+                    <input type="text" class="project-title" value="${project.title}" placeholder="My Awesome Project" onchange="updateProject(${project.id})">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" class="project-category" value="${project.category}" placeholder="Web Design, Branding, etc." onchange="updateProject(${project.id})">
+                </div>
+                <div class="form-group">
+                    <label>Project Image</label>
+                    <div class="image-upload-area">
+                        <input type="file" accept="image/*" class="project-image-input" onchange="handleImageUpload(${project.id}, event)">
+                        <div class="upload-placeholder">
+                            <div class="upload-icon">📷</div>
+                            <div>Click to upload or paste image URL below</div>
+                        </div>
+                    </div>
+                    <input type="url" class="project-image-url" value="${project.image}" placeholder="Or paste image URL here" onchange="updateProject(${project.id})" style="margin-top: 0.5rem;">
+                    ${project.image ? `<div class="image-preview"><img src="${project.image}" alt="Preview"><button class="remove-image" onclick="removeProjectImage(${project.id})">Remove</button></div>` : ''}
+                </div>
+                <div class="form-group">
+                    <label>Project Link (optional)</label>
+                    <input type="url" class="project-link" value="${project.link}" placeholder="https://example.com" onchange="updateProject(${project.id})">
+                </div>
+            </div>
+        `;
+        
+        projectsList.appendChild(projectItem);
+    }
+    
+    window.updateProject = function(projectId) {
+        const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+        const project = projects.find(p => p.id === projectId);
+        
+        if (project && projectItem) {
+            project.title = projectItem.querySelector('.project-title').value;
+            project.category = projectItem.querySelector('.project-category').value;
+            project.image = projectItem.querySelector('.project-image-url').value;
+            project.link = projectItem.querySelector('.project-link').value;
+            
+            updateProjectsInConfig();
+            applyConfiguration();
+        }
+    };
+    
+    window.toggleProject = function(projectId) {
+        const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+        const toggleBtn = projectItem.querySelector('.toggle');
+        
+        if (projectItem.classList.contains('collapsed')) {
+            projectItem.classList.remove('collapsed');
+            toggleBtn.textContent = '−';
+        } else {
+            projectItem.classList.add('collapsed');
+            toggleBtn.textContent = '+';
+        }
+    };
+    
+    window.deleteProject = function(projectId) {
+        if (confirm('Delete this project?')) {
+            projects = projects.filter(p => p.id !== projectId);
+            const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+            projectItem.remove();
+            
+            // Renumber remaining projects
+            document.querySelectorAll('.project-item').forEach((item, index) => {
+                item.querySelector('.project-number').textContent = `Project ${index + 1}`;
+            });
+            
+            updateProjectsInConfig();
+            applyConfiguration();
+        }
+    };
+    
+    window.handleImageUpload = function(projectId, event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+                const imageUrlInput = projectItem.querySelector('.project-image-url');
+                imageUrlInput.value = e.target.result;
+                
+                // Add preview
+                const existingPreview = projectItem.querySelector('.image-preview');
+                if (existingPreview) {
+                    existingPreview.remove();
+                }
+                
+                const preview = document.createElement('div');
+                preview.className = 'image-preview';
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button class="remove-image" onclick="removeProjectImage(${projectId})">Remove</button>
+                `;
+                projectItem.querySelector('.image-upload-area').parentNode.appendChild(preview);
+                
+                updateProject(projectId);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    window.removeProjectImage = function(projectId) {
+        const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
+        const imageUrlInput = projectItem.querySelector('.project-image-url');
+        imageUrlInput.value = '';
+        
+        const preview = projectItem.querySelector('.image-preview');
+        if (preview) {
+            preview.remove();
+        }
+        
+        updateProject(projectId);
+    };
+    
+    function updateProjectsInConfig() {
+        currentConfig.projects = projects.map(p => ({
+            title: p.title,
+            category: p.category,
+            image: p.image,
+            link: p.link || '#'
+        }));
+        
+        localStorage.setItem('portfolioConfig', JSON.stringify(currentConfig));
+    }
+    
+    function loadProjects() {
+        if (currentConfig.projects && Array.isArray(currentConfig.projects)) {
+            projects = currentConfig.projects.map((p, index) => ({
+                id: Date.now() + index,
+                title: p.title || '',
+                category: p.category || '',
+                image: p.image || '',
+                link: p.link || ''
+            }));
+            
+            projectsList.innerHTML = '';
+            projects.forEach((project, index) => {
+                renderProject(project, index);
+            });
+        }
+    }
+    
+    // Load projects when initializing
+    if (projectsList && !hasSharedConfig) {
+        loadProjects();
     }
 
     // Initialize when DOM is ready
