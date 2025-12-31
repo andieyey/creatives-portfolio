@@ -559,6 +559,10 @@
     window.handleImageUpload = function(projectId, event) {
         const file = event.target.files[0];
         if (file) {
+            // Check file size (warn if > 100KB)
+            if (file.size > 102400) {
+                alert('⚠️ Large images may create URLs that are too long to share.\n\nTip: Use a smaller image or host it online and paste the URL instead.');
+            }
             const reader = new FileReader();
             reader.onload = function(e) {
                 const projectItem = document.querySelector(`[data-project-id="${projectId}"]`);
