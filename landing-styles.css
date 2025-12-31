@@ -114,6 +114,7 @@ body {
 .hamburger {
     display: none;
     cursor: pointer;
+    flex-direction: column;
 }
 
 .hamburger .bar {
@@ -122,6 +123,19 @@ body {
     background: var(--dark);
     margin: 3px 0;
     transition: 0.3s;
+}
+
+.nav-menu.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    gap: 1.5rem;
 }
 
 /* Hero Section */
@@ -756,24 +770,28 @@ body {
 @media (max-width: 968px) {
     .hero-container {
         grid-template-columns: 1fr;
-        text-align: center;
+        gap: 3rem;
+    }
+    
+    .hero-content {
+        max-width: 100%;
     }
 
     .hero-heading {
-        font-size: 2.5rem;
+        font-size: 3rem;
     }
 
     .hero-cta-group {
-        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .hero-stats {
-        justify-content: center;
+        justify-content: flex-start;
+        gap: 2rem;
     }
 
     .hero-preview {
-        max-width: 500px;
-        margin: 0 auto;
+        max-width: 100%;
     }
 
     .preview-window {
@@ -802,6 +820,7 @@ body {
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
+        flex-direction: column;
     }
 
     .nav-menu {
@@ -809,7 +828,46 @@ body {
     }
 
     .btn-cta {
-        display: none;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .hero-landing {
+        padding: 100px 20px 60px;
+    }
+    
+    .hero-heading {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subheading {
+        font-size: 1rem;
+    }
+    
+    .btn-hero-primary,
+    .btn-hero-secondary {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .hero-cta-group {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .hero-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
     }
 
     .hero-heading {
