@@ -8,6 +8,9 @@
 
     // Load configuration from URL or localStorage or default
     let currentConfig = loadConfiguration();
+    
+    // Expose for templates
+    window.currentConfig = currentConfig;
 
     // Onboarding
     let currentStep = 1;
@@ -360,6 +363,9 @@
             darkModeToggle.checked = currentConfig.darkMode || false;
         }
     }
+    
+    // Expose for templates
+    window.populateForm = populateForm;
 
     // Apply configuration to the page
     function applyConfiguration() {
@@ -490,6 +496,9 @@
             el.style.color = textColor;
         });
     }
+    
+    // Expose for templates
+    window.applyConfiguration = applyConfiguration;
 
     // Update configuration from form inputs
     function updateConfiguration() {

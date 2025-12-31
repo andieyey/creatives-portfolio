@@ -716,6 +716,42 @@
     margin-top: 0.25rem;
 }
 
+/* Templates Grid */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.template-card {
+    cursor: pointer;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.template-card:hover {
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.template-preview {
+    height: 80px;
+    width: 100%;
+}
+
+.template-name {
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+    background: white;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .editor-panel {

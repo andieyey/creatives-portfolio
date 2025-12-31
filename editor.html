@@ -61,6 +61,7 @@
                     <button class="tab-btn" data-tab="about">About</button>
                     <button class="tab-btn" data-tab="projects">Projects</button>
                     <button class="tab-btn" data-tab="style">Style</button>
+                    <button class="tab-btn" data-tab="templates">Templates</button>
                 </div>
 
                 <div class="tab-content active" data-content="basic">
@@ -225,6 +226,37 @@
                         <div class="form-group" style="margin-top: 1rem;">
                             <label>Header Image (Optional)</label>
                             <input type="url" id="edit-hero-image" placeholder="https://example.com/image.jpg or leave empty for gradient">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" data-content="templates">
+                    <div class="editor-section">
+                        <div class="section-title">
+                            <h3>Quick Templates</h3>
+                            <p class="section-description">One-click color themes</p>
+                        </div>
+                        <div class="templates-grid">
+                            <div class="template-card" onclick="applyTemplate('modern')">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                <div class="template-name">Modern Gradient</div>
+                            </div>
+                            <div class="template-card" onclick="applyTemplate('minimal')">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);"></div>
+                                <div class="template-name">Minimal Dark</div>
+                            </div>
+                            <div class="template-card" onclick="applyTemplate('sunset')">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #fb923c 0%, #f43f5e 100%);"></div>
+                                <div class="template-name">Sunset Vibes</div>
+                            </div>
+                            <div class="template-card" onclick="applyTemplate('ocean')">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #0369a1 0%, #164e63 100%);"></div>
+                                <div class="template-name">Ocean Blue</div>
+                            </div>
+                            <div class="template-card" onclick="applyTemplate('forest')">
+                                <div class="template-preview" style="background: linear-gradient(135deg, #047857 0%, #0d9488 100%);"></div>
+                                <div class="template-name">Forest Green</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -421,6 +453,7 @@
     </footer>
 
     <script src="config.js"></script>
+    <script src="templates.js"></script>
     <script src="editor.js"></script>
     <script src="script.js"></script>
 </body>
