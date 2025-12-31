@@ -77,6 +77,9 @@
     const secondaryColorInput = document.getElementById('edit-secondary-color');
     const textColorInput = document.getElementById('edit-text-color');
     const bgColorInput = document.getElementById('edit-bg-color');
+    const heroColor1Input = document.getElementById('edit-hero-color1');
+    const heroColor2Input = document.getElementById('edit-hero-color2');
+    const heroImageInput = document.getElementById('edit-hero-image');
     const darkModeToggle = document.getElementById('darkModeToggle');
     
     if (primaryColorInput) {
@@ -111,6 +114,31 @@
         bgColorInput.addEventListener('input', (e) => {
             if (bgValue) bgValue.textContent = e.target.value;
             currentConfig.colors.background = e.target.value;
+            applyConfiguration();
+        });
+    }
+    
+    if (heroColor1Input) {
+        const heroColor1Value = heroColor1Input.nextElementSibling;
+        heroColor1Input.addEventListener('input', (e) => {
+            if (heroColor1Value) heroColor1Value.textContent = e.target.value;
+            currentConfig.colors.heroColor1 = e.target.value;
+            applyConfiguration();
+        });
+    }
+    
+    if (heroColor2Input) {
+        const heroColor2Value = heroColor2Input.nextElementSibling;
+        heroColor2Input.addEventListener('input', (e) => {
+            if (heroColor2Value) heroColor2Value.textContent = e.target.value;
+            currentConfig.colors.heroColor2 = e.target.value;
+            applyConfiguration();
+        });
+    }
+    
+    if (heroImageInput) {
+        heroImageInput.addEventListener('input', (e) => {
+            currentConfig.heroImage = e.target.value;
             applyConfiguration();
         });
     }
@@ -192,7 +220,10 @@
         primaryColor: document.getElementById('edit-primary-color'),
         secondaryColor: document.getElementById('edit-secondary-color'),
         textColor: document.getElementById('edit-text-color'),
-        bgColor: document.getElementById('edit-bg-color')
+        bgColor: document.getElementById('edit-bg-color'),
+        heroColor1: document.getElementById('edit-hero-color1'),
+        heroColor2: document.getElementById('edit-hero-color2'),
+        heroImage: document.getElementById('edit-hero-image')
     };
 
     // Projects management
@@ -271,9 +302,12 @@
                 primary: "#6366f1",
                 secondary: "#8b5cf6",
                 text: "#374151",
-                background: "#ffffff"
+                background: "#ffffff",
+                heroColor1: "#667eea",
+                heroColor2: "#764ba2"
             },
             darkMode: false,
+            heroImage: "",
             projects: []
         };
     }
@@ -294,6 +328,9 @@
         inputs.secondaryColor.value = currentConfig.colors.secondary;
         inputs.textColor.value = currentConfig.colors.text || '#374151';
         inputs.bgColor.value = currentConfig.colors.background || '#ffffff';
+        inputs.heroColor1.value = currentConfig.colors.heroColor1 || '#667eea';
+        inputs.heroColor2.value = currentConfig.colors.heroColor2 || '#764ba2';
+        inputs.heroImage.value = currentConfig.heroImage || '';
         
         // Update color value displays
         if (inputs.primaryColor.nextElementSibling) {
@@ -304,6 +341,15 @@
         }
         if (inputs.textColor.nextElementSibling) {
             inputs.textColor.nextElementSibling.textContent = currentConfig.colors.text || '#374151';
+        }
+        if (inputs.bgColor.nextElementSibling) {
+            inputs.bgColor.nextElementSibling.textContent = currentConfig.colors.background || '#ffffff';
+        }
+        if (inputs.heroColor1.nextElementSibling) {
+            inputs.heroColor1.nextElementSibling.textContent = currentConfig.colors.heroColor1 || '#667eea';
+        }
+        if (inputs.heroColor2.nextElementSibling) {
+            inputs.heroColor2.nextElementSibling.textContent = currentConfig.colors.heroColor2 || '#764ba2';
         }
         if (inputs.bgColor.nextElementSibling) {
             inputs.bgColor.nextElementSibling.textContent = currentConfig.colors.background || '#ffffff';
@@ -394,6 +440,25 @@
         document.documentElement.style.setProperty('--primary-color', currentConfig.colors.primary);
         document.documentElement.style.setProperty('--secondary-color', currentConfig.colors.secondary);
         
+        // Apply hero colors and image
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            const heroColor1 = currentConfig.colors.heroColor1 || '#667eea';
+            const heroColor2 = currentConfig.colors.heroColor2 || '#764ba2';
+            
+            if (currentConfig.heroImage && currentConfig.heroImage.trim() !== '') {
+                heroSection.style.background = `linear-gradient(135deg, ${heroColor1}cc 0%, ${heroColor2}cc 100%), url('${currentConfig.heroImage}')`;
+                heroSection.style.backgroundSize = 'cover';
+                heroSection.style.backgroundPosition = 'center';
+                heroSection.style.backgroundBlendMode = 'multiply';
+            } else {
+                heroSection.style.background = `linear-gradient(135deg, ${heroColor1} 0%, ${heroColor2} 100%)`;
+                heroSection.style.backgroundSize = '';
+                heroSection.style.backgroundPosition = '';
+                heroSection.style.backgroundBlendMode = '';
+            }
+        }
+        
         // Apply dark mode class first
         if (currentConfig.darkMode) {
             document.body.classList.add('dark-mode');
@@ -449,8 +514,11 @@
                 primary: inputs.primaryColor.value,
                 secondary: inputs.secondaryColor.value,
                 text: inputs.textColor.value,
-                background: inputs.bgColor.value
+                background: inputs.bgColor.value,
+                heroColor1: inputs.heroColor1.value,
+                heroColor2: inputs.heroColor2.value
             },
+            heroImage: inputs.heroImage.value,
             darkMode: darkModeToggle ? darkModeToggle.checked : false,
             projects: currentConfig.projects || []
         };

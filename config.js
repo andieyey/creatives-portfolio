@@ -87,11 +87,16 @@ const portfolioConfig = {
         dark: "#1f2937",
         light: "#f9fafb",
         text: "#374151",
-        background: "#ffffff"
+        background: "#ffffff",
+        heroColor1: "#667eea",
+        heroColor2: "#764ba2"
     },
     
     // ===== THEME SETTINGS =====
-    darkMode: false
+    darkMode: false,
+    
+    // ===== HERO CUSTOMIZATION =====
+    heroImage: ""
 };
 
 // ============================================
