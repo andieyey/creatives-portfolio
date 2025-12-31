@@ -95,12 +95,14 @@
     const editorToggle = document.getElementById('editorToggle');
     const floatBtn = document.getElementById('floatBtn');
     const openEditorBtn = document.getElementById('openEditor');
+    const saveConfigBtn = document.getElementById('saveConfig');
     const generateLinkBtn = document.getElementById('generateLink');
     const downloadConfigBtn = document.getElementById('downloadConfig');
     const resetConfigBtn = document.getElementById('resetConfig');
     const copyLinkBtn = document.getElementById('copyLink');
     const linkResult = document.getElementById('linkResult');
     const generatedLink = document.getElementById('generatedLink');
+    const saveNotification = document.getElementById('saveNotification');
 
     // Form inputs
     const inputs = {
@@ -306,6 +308,11 @@
             });
         }
 
+        // Save configuration
+        if (saveConfigBtn) {
+            saveConfigBtn.addEventListener('click', saveConfiguration);
+        }
+
         // Live updates as user types
         Object.values(inputs).forEach(input => {
             input.addEventListener('input', updateConfiguration);
@@ -350,6 +357,26 @@
         
         // Scroll to show the link
         linkResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Save configuration
+    function saveConfiguration() {
+        // Save to localStorage
+        localStorage.setItem('portfolioConfig', JSON.stringify(currentConfig));
+        
+        // Show save notification
+        if (saveNotification) {
+            saveNotification.classList.add('show');
+            saveNotification.style.display = 'flex';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                saveNotification.classList.remove('show');
+                setTimeout(() => {
+                    saveNotification.style.display = 'none';
+                }, 300);
+            }, 3000);
+        }
     }
 
     // Download configuration as JSON

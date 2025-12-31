@@ -164,12 +164,20 @@
                 </div>
 
                 <div class="editor-actions">
-                    <button class="btn btn-primary" id="generateLink">
+                    <button class="btn btn-primary" id="saveConfig">
+                        💾 Save Changes
+                    </button>
+                    <button class="btn btn-secondary" id="generateLink">
                         Generate Link →
                     </button>
                     <div class="action-menu">
                         <button class="btn btn-ghost" id="resetConfig">Reset</button>
                     </div>
+                </div>
+
+                <div class="save-notification" id="saveNotification" style="display: none;">
+                    <span class="save-icon">✓</span>
+                    <span>Changes saved!</span>
                 </div>
 
                 <div class="link-result" id="linkResult" style="display: none;">
