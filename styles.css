@@ -737,8 +737,12 @@ btn-download {
 }
 /* Dark Mode */
 body.dark-mode {
-    background-color: #111827;
-    color: #e5e7eb;
+    background-color: var(--bg-color, #111827);
+    color: var(--text-color, #e5e7eb);
+}
+
+body.dark-mode .hero {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
 }
 
 body.dark-mode .navbar {
@@ -748,7 +752,7 @@ body.dark-mode .navbar {
 
 body.dark-mode .logo a,
 body.dark-mode .nav-link {
-    color: #e5e7eb;
+    color: #f3f4f6;
 }
 
 body.dark-mode .nav-link:hover {
@@ -762,7 +766,7 @@ body.dark-mode .contact {
 }
 
 body.dark-mode .section-title h2 {
-    color: #e5e7eb;
+    color: #f9fafb;
 }
 
 body.dark-mode .about-text h3,
@@ -774,27 +778,33 @@ body.dark-mode .contact-item h4 {
 body.dark-mode .about-text p,
 body.dark-mode .portfolio-info p,
 body.dark-mode .contact-item p {
-    color: #d1d5db;
+    color: var(--text-color, #d1d5db);
 }
 
 body.dark-mode .skill-tag {
-    background: rgba(99, 102, 241, 0.1);
-    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.15);
+    color: #c7d2fe;
     border: 1px solid rgba(99, 102, 241, 0.3);
 }
 
 body.dark-mode .portfolio-item {
     background: #111827;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .portfolio-item:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: translateY(-8px);
 }
 
 body.dark-mode .footer {
     background: #0f172a;
     color: #9ca3af;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .btn-primary {
-    box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+    box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.5);
 }
 
 body.dark-mode .btn-secondary {
@@ -804,4 +814,23 @@ body.dark-mode .btn-secondary {
 
 body.dark-mode .btn-secondary:hover {
     background: #4b5563;
+}
+
+body.dark-mode .name {
+    color: #ffffff;
+    text-shadow: 0 2px 20px rgba(99, 102, 241, 0.5);
+}
+
+body.dark-mode .greeting,
+body.dark-mode .hero-subtitle,
+body.dark-mode .hero-description {
+    color: #e5e7eb;
+}
+
+body.dark-mode .contact-item a {
+    color: var(--primary-color);
+}
+
+body.dark-mode .contact-item a:hover {
+    color: var(--secondary-color);
 }
