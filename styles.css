@@ -133,7 +133,9 @@ body {
     display: flex;
     align-items: center;
     padding: 100px 20px 60px;
- template-badge {
+}
+
+.template-badge {
     display: inline-block;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
@@ -145,7 +147,8 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: var(--white);
     position: relative;
     overflow: hidden;
@@ -183,7 +186,8 @@ body {
     font-size: 4rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: var(--dark-color);
+    color: var(--white);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .hero-subtitle {
