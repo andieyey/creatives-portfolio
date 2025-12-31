@@ -83,6 +83,8 @@
         const primaryValue = primaryColorInput.nextElementSibling;
         primaryColorInput.addEventListener('input', (e) => {
             if (primaryValue) primaryValue.textContent = e.target.value;
+            currentConfig.colors.primary = e.target.value;
+            applyConfiguration();
         });
     }
     
@@ -90,6 +92,8 @@
         const secondaryValue = secondaryColorInput.nextElementSibling;
         secondaryColorInput.addEventListener('input', (e) => {
             if (secondaryValue) secondaryValue.textContent = e.target.value;
+            currentConfig.colors.secondary = e.target.value;
+            applyConfiguration();
         });
     }
     
@@ -97,6 +101,8 @@
         const textValue = textColorInput.nextElementSibling;
         textColorInput.addEventListener('input', (e) => {
             if (textValue) textValue.textContent = e.target.value;
+            currentConfig.colors.text = e.target.value;
+            applyConfiguration();
         });
     }
     
@@ -104,12 +110,55 @@
         const bgValue = bgColorInput.nextElementSibling;
         bgColorInput.addEventListener('input', (e) => {
             if (bgValue) bgValue.textContent = e.target.value;
+            currentConfig.colors.background = e.target.value;
+            applyConfiguration();
         });
     }
     
     if (darkModeToggle) {
         darkModeToggle.addEventListener('change', (e) => {
             currentConfig.darkMode = e.target.checked;
+            if (e.target.checked) {
+                // Set dark mode colors if not customized
+                if (!currentConfig.colors.text || currentConfig.colors.text === '#374151') {
+                    currentConfig.colors.text = '#e5e7eb';
+                    if (textColorInput) {
+                        textColorInput.value = '#e5e7eb';
+                        if (textColorInput.nextElementSibling) {
+                            textColorInput.nextElementSibling.textContent = '#e5e7eb';
+                        }
+                    }
+                }
+                if (!currentConfig.colors.background || currentConfig.colors.background === '#ffffff') {
+                    currentConfig.colors.background = '#111827';
+                    if (bgColorInput) {
+                        bgColorInput.value = '#111827';
+                        if (bgColorInput.nextElementSibling) {
+                            bgColorInput.nextElementSibling.textContent = '#111827';
+                        }
+                    }
+                }
+            } else {
+                // Reset to light mode colors
+                if (currentConfig.colors.text === '#e5e7eb') {
+                    currentConfig.colors.text = '#374151';
+                    if (textColorInput) {
+                        textColorInput.value = '#374151';
+                        if (textColorInput.nextElementSibling) {
+                            textColorInput.nextElementSibling.textContent = '#374151';
+                        }
+                    }
+                }
+                if (currentConfig.colors.background === '#111827') {
+                    currentConfig.colors.background = '#ffffff';
+                    if (bgColorInput) {
+                        bgColorInput.value = '#ffffff';
+                        if (bgColorInput.nextElementSibling) {
+                            bgColorInput.nextElementSibling.textContent = '#ffffff';
+                        }
+                    }
+                }
+            }
             applyConfiguration();
         });
     }
@@ -224,7 +273,8 @@
                 text: "#374151",
                 background: "#ffffff"
             },
-            darkMode: false
+            darkMode: false,
+            projects: []
         };
     }
 
@@ -344,29 +394,36 @@
         document.documentElement.style.setProperty('--primary-color', currentConfig.colors.primary);
         document.documentElement.style.setProperty('--secondary-color', currentConfig.colors.secondary);
         
-        // Apply custom colors
-        if (currentConfig.colors.text) {
-            document.documentElement.style.setProperty('--text-color', currentConfig.colors.text);
-        }
-        if (currentConfig.colors.background) {
-            document.documentElement.style.setProperty('--bg-color', currentConfig.colors.background);
-            document.body.style.backgroundColor = currentConfig.colors.background;
-        }
-        
-        // Apply dark mode
+        // Apply dark mode class first
         if (currentConfig.darkMode) {
             document.body.classList.add('dark-mode');
-            // Apply dark mode colors if not custom set
-            if (!currentConfig.colors.text) {
-                document.documentElement.style.setProperty('--text-color', '#e5e7eb');
-            }
-            if (!currentConfig.colors.background) {
-                document.documentElement.style.setProperty('--bg-color', '#111827');
-                document.body.style.backgroundColor = '#111827';
-            }
         } else {
             document.body.classList.remove('dark-mode');
         }
+        
+        // Apply custom colors (these override dark mode defaults)
+        const textColor = currentConfig.colors.text || (currentConfig.darkMode ? '#e5e7eb' : '#374151');
+        const bgColor = currentConfig.colors.background || (currentConfig.darkMode ? '#111827' : '#ffffff');
+        
+        document.documentElement.style.setProperty('--text-color', textColor);
+        document.documentElement.style.setProperty('--bg-color', bgColor);
+        document.body.style.backgroundColor = bgColor;
+        document.body.style.color = textColor;
+        
+        // Apply to all sections
+        const sections = document.querySelectorAll('.about, .portfolio, .contact');
+        sections.forEach(section => {
+            if (currentConfig.darkMode) {
+                section.style.backgroundColor = bgColor === '#111827' ? '#1f2937' : bgColor;
+            } else {
+                section.style.backgroundColor = bgColor === '#ffffff' ? '#f9fafb' : bgColor;
+            }
+        });
+        
+        // Update text colors
+        document.querySelectorAll('.about-text p, .portfolio-info p, .contact-item p').forEach(el => {
+            el.style.color = textColor;
+        });
     }
 
     // Update configuration from form inputs
