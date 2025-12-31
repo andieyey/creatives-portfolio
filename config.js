@@ -85,8 +85,13 @@ const portfolioConfig = {
         primary: "#6366f1",
         secondary: "#8b5cf6",
         dark: "#1f2937",
-        light: "#f9fafb"
-    }
+        light: "#f9fafb",
+        text: "#374151",
+        background: "#ffffff"
+    },
+    
+    // ===== THEME SETTINGS =====
+    darkMode: false
 };
 
 // ============================================

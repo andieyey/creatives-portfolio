@@ -735,3 +735,73 @@ btn-download {
 .contact-content {
     animation: fadeInUp 0.8s ease-out;
 }
+/* Dark Mode */
+body.dark-mode {
+    background-color: #111827;
+    color: #e5e7eb;
+}
+
+body.dark-mode .navbar {
+    background: rgba(17, 24, 39, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .logo a,
+body.dark-mode .nav-link {
+    color: #e5e7eb;
+}
+
+body.dark-mode .nav-link:hover {
+    color: var(--primary-color);
+}
+
+body.dark-mode .about,
+body.dark-mode .portfolio,
+body.dark-mode .contact {
+    background: #1f2937;
+}
+
+body.dark-mode .section-title h2 {
+    color: #e5e7eb;
+}
+
+body.dark-mode .about-text h3,
+body.dark-mode .portfolio-info h3,
+body.dark-mode .contact-item h4 {
+    color: #f3f4f6;
+}
+
+body.dark-mode .about-text p,
+body.dark-mode .portfolio-info p,
+body.dark-mode .contact-item p {
+    color: #d1d5db;
+}
+
+body.dark-mode .skill-tag {
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+body.dark-mode .portfolio-item {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .footer {
+    background: #0f172a;
+    color: #9ca3af;
+}
+
+body.dark-mode .btn-primary {
+    box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+}
+
+body.dark-mode .btn-secondary {
+    background: #374151;
+    color: #e5e7eb;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #4b5563;
+}

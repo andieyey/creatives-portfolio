@@ -75,6 +75,9 @@
     // Color input listeners
     const primaryColorInput = document.getElementById('edit-primary-color');
     const secondaryColorInput = document.getElementById('edit-secondary-color');
+    const textColorInput = document.getElementById('edit-text-color');
+    const bgColorInput = document.getElementById('edit-bg-color');
+    const darkModeToggle = document.getElementById('darkModeToggle');
     
     if (primaryColorInput) {
         const primaryValue = primaryColorInput.nextElementSibling;
@@ -87,6 +90,27 @@
         const secondaryValue = secondaryColorInput.nextElementSibling;
         secondaryColorInput.addEventListener('input', (e) => {
             if (secondaryValue) secondaryValue.textContent = e.target.value;
+        });
+    }
+    
+    if (textColorInput) {
+        const textValue = textColorInput.nextElementSibling;
+        textColorInput.addEventListener('input', (e) => {
+            if (textValue) textValue.textContent = e.target.value;
+        });
+    }
+    
+    if (bgColorInput) {
+        const bgValue = bgColorInput.nextElementSibling;
+        bgColorInput.addEventListener('input', (e) => {
+            if (bgValue) bgValue.textContent = e.target.value;
+        });
+    }
+    
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('change', (e) => {
+            currentConfig.darkMode = e.target.checked;
+            applyConfiguration();
         });
     }
 
@@ -117,7 +141,9 @@
         phone: document.getElementById('edit-phone'),
         location: document.getElementById('edit-location'),
         primaryColor: document.getElementById('edit-primary-color'),
-        secondaryColor: document.getElementById('edit-secondary-color')
+        secondaryColor: document.getElementById('edit-secondary-color'),
+        textColor: document.getElementById('edit-text-color'),
+        bgColor: document.getElementById('edit-bg-color')
     };
 
     // Projects management
@@ -194,8 +220,11 @@
             },
             colors: {
                 primary: "#6366f1",
-                secondary: "#8b5cf6"
-            }
+                secondary: "#8b5cf6",
+                text: "#374151",
+                background: "#ffffff"
+            },
+            darkMode: false
         };
     }
 
@@ -213,6 +242,27 @@
         inputs.location.value = currentConfig.contact.location;
         inputs.primaryColor.value = currentConfig.colors.primary;
         inputs.secondaryColor.value = currentConfig.colors.secondary;
+        inputs.textColor.value = currentConfig.colors.text || '#374151';
+        inputs.bgColor.value = currentConfig.colors.background || '#ffffff';
+        
+        // Update color value displays
+        if (inputs.primaryColor.nextElementSibling) {
+            inputs.primaryColor.nextElementSibling.textContent = currentConfig.colors.primary;
+        }
+        if (inputs.secondaryColor.nextElementSibling) {
+            inputs.secondaryColor.nextElementSibling.textContent = currentConfig.colors.secondary;
+        }
+        if (inputs.textColor.nextElementSibling) {
+            inputs.textColor.nextElementSibling.textContent = currentConfig.colors.text || '#374151';
+        }
+        if (inputs.bgColor.nextElementSibling) {
+            inputs.bgColor.nextElementSibling.textContent = currentConfig.colors.background || '#ffffff';
+        }
+        
+        // Set dark mode toggle
+        if (darkModeToggle) {
+            darkModeToggle.checked = currentConfig.darkMode || false;
+        }
     }
 
     // Apply configuration to the page
@@ -293,6 +343,30 @@
         // Apply colors
         document.documentElement.style.setProperty('--primary-color', currentConfig.colors.primary);
         document.documentElement.style.setProperty('--secondary-color', currentConfig.colors.secondary);
+        
+        // Apply custom colors
+        if (currentConfig.colors.text) {
+            document.documentElement.style.setProperty('--text-color', currentConfig.colors.text);
+        }
+        if (currentConfig.colors.background) {
+            document.documentElement.style.setProperty('--bg-color', currentConfig.colors.background);
+            document.body.style.backgroundColor = currentConfig.colors.background;
+        }
+        
+        // Apply dark mode
+        if (currentConfig.darkMode) {
+            document.body.classList.add('dark-mode');
+            // Apply dark mode colors if not custom set
+            if (!currentConfig.colors.text) {
+                document.documentElement.style.setProperty('--text-color', '#e5e7eb');
+            }
+            if (!currentConfig.colors.background) {
+                document.documentElement.style.setProperty('--bg-color', '#111827');
+                document.body.style.backgroundColor = '#111827';
+            }
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
     }
 
     // Update configuration from form inputs
@@ -316,8 +390,12 @@
             },
             colors: {
                 primary: inputs.primaryColor.value,
-                secondary: inputs.secondaryColor.value
-            }
+                secondary: inputs.secondaryColor.value,
+                text: inputs.textColor.value,
+                background: inputs.bgColor.value
+            },
+            darkMode: darkModeToggle ? darkModeToggle.checked : false,
+            projects: currentConfig.projects || []
         };
 
         // Save to localStorage
