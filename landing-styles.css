@@ -179,23 +179,27 @@ body {
 @keyframes float {
     0%, 100% { transform: translate(0, 0); }
     33% { transform: translate(20px, -30px); }
-    66% { transform: translate(-15px, 15px
+    66% { transform: translate(-15px, 15px); }
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
     position: relative;
     z-index: 1;
 }
 
+.hero-content {
+    max-width: 600px;
+}
+
 .hero-badge {
     display: inline-block;
-    padding: 8px 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 30px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-6px 16px;
+    padding: 6px 16px;
     background: var(--gray-light);
     border: 1px solid rgba(15, 23, 42, 0.1);
     border-radius: 6px;
@@ -207,9 +211,9 @@ body {
 }
 
 .hero-heading {
-    font-size: 4rem;
+    font-size: 3.75rem;
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.1;
     margin-bottom: 1.5rem;
     color: var(--dark);
     letter-spacing: -0.03em;
@@ -224,19 +228,32 @@ body {
 .gradient-text::after {
     content: '';
     position: absolute;
-    bottom: 8px;
+    bottom: 6px;
     left: 0;
     right: 0;
-    height: 20px;
+    height: 16px;
     background: rgba(37, 99, 235, 0.15);
     z-index: -1;
+    border-radius: 4px;
 }
 
 .hero-subheading {
     font-size: 1.15rem;
     color: var(--gray-text);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+    max-width: 540px;
+}
+
+.hero-cta-group {
+    display: flex;
+    gap: 1rem;
     margin-bottom: 3rem;
-    line-height: 1.6px;
+}
+
+.btn-hero-primary,
+.btn-hero-secondary {
+    padding: 14px 32px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
@@ -265,23 +282,23 @@ body {
 
 .btn-hero-secondary:hover {
     background: var(--gray-light);
-    border-color: rgba(15, 23, 42, 0.3
-
-.btn-hero-secondary:hover {
-    background: var(--primary);
-    color: white;
-    transform: translateY(-3px);
+    border-color: rgba(15, 23, 42, 0.3);
+    transform: translateY(-2px);
 }
 
 .hero-stats {
     display: flex;
     gap: 3rem;
+    margin-top: 3rem;
 }
 
 .stat-item {
-    text-align: center;
-}1.75rem;
-    font-weight: 600;
+    text-align: left;
+}
+
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
     color: var(--dark);
     margin-bottom: 0.25rem;
     letter-spacing: -0.02em;
@@ -290,14 +307,16 @@ body {
 .stat-label {
     font-size: 0.85rem;
     color: var(--gray-text);
-    font-weight: 400
-.stat-label {
-    font-size: 0.9rem;
-    color: #64748b;
+    font-weight: 400;
 }
 
 .hero-preview {
-    position: relat12px;
+    position: relative;
+}
+
+.preview-window {
+    background: white;
+    border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(15, 23, 42, 0.1);
     box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
@@ -321,16 +340,18 @@ body {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: rgba(15, 23, 42, 0.15)
-.preview-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #e5e7eb;
+    background: rgba(15, 23, 42, 0.15);
 }
 
-.preview-conte20px 20px;
-    background: var(--cream);
+.preview-content {
+    padding: 0;
+    background: white;
+}
+
+.preview-content img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .section-header {
@@ -349,16 +370,26 @@ body {
 .section-subtitle {
     font-size: 1.1rem;
     color: var(--gray-text);
-    font-weight: 40000;
-    margin-bottom: 1rem;
-    color: var(--dark);
+    font-weight: 400;
 }
 
-.section-subtitle {
-    font-size: 1.2rem;
-    color: #64748b;
+/* Features Section */
+.features-section {
+    padding: 100px 20px;
+    background: var(--cream);
 }
-white);
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    padding: 2.5rem;
+    background: var(--white);
     border-radius: 12px;
     transition: all 0.4s ease;
     border: 1px solid rgba(15, 23, 42, 0.08);
