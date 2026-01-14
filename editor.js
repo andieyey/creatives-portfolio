@@ -975,7 +975,7 @@
     
     function signOut() {
         if (confirm('Sign out? Your portfolios will remain saved in your account.')) {
-            window.location.href = '/api/auth/signout';
+            window.location.href = '/api/auth/signout?callbackUrl=/';
         }
     }
     

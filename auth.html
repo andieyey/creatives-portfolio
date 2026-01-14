@@ -197,7 +197,7 @@
         }
 
         googleSignIn.addEventListener('click', async () => {
-            window.location.href = '/api/auth/signin/google?callbackUrl=/editor.html';
+            window.location.href = '/api/auth/signin?provider=google&callbackUrl=/editor.html';
         });
 
         function showMessage(text, type) {
