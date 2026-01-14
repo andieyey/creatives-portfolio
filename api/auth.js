@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
+import Google from 'next-auth/providers/google.js';
 import { kv } from '@vercel/kv';
 
 // Custom KV adapter for NextAuth
@@ -79,7 +79,7 @@ const KVAdapter = {
 
 const authHandler = NextAuth({
   providers: [
-    GoogleProvider({
+    Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     })
