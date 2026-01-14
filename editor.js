@@ -615,6 +615,11 @@
         // Save to localStorage
         localStorage.setItem('portfolioConfig', JSON.stringify(currentConfig));
         
+        // Auto-regenerate the shareable link if it was previously generated
+        if (linkResult && linkResult.style.display === 'block') {
+            generateShareableLink();
+        }
+        
         // Show save notification
         if (saveNotification) {
             saveNotification.classList.add('show');
