@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Builder - Editor</title>
+    <title>Craftfolio - Editor</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="editor-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -13,8 +13,7 @@
     <div class="onboarding-overlay" id="onboardingOverlay">
         <div class="onboarding-modal">
             <div class="onboarding-step active" data-step="1">
-                <div class="onboarding-icon">👋</div>
-                <h2>Welcome to your portfolio builder</h2>
+                <h2>Welcome to Craftfolio</h2>
                 <p>In the next 3 minutes, you'll have a live portfolio ready to share. No sign up needed.</p>
                 <div class="onboarding-actions">
                     <button class="btn-onboarding" onclick="nextOnboardingStep()">Let's go →</button>
@@ -22,7 +21,6 @@
             </div>
             
             <div class="onboarding-step" data-step="2">
-                <div class="onboarding-icon">✏️</div>
                 <h2>Edit on the left</h2>
                 <p>Type your info in the sidebar. Everything updates live on the right side.</p>
                 <div class="onboarding-actions">
@@ -32,7 +30,6 @@
             </div>
             
             <div class="onboarding-step" data-step="3">
-                <div class="onboarding-icon">🔗</div>
                 <h2>Share your link</h2>
                 <p>When you're done, click "Generate Link" to get a URL you can share anywhere.</p>
                 <div class="onboarding-actions">
@@ -47,7 +44,6 @@
         <div class="editor-panel" id="editorPanel">
             <div class="editor-header">
                 <div class="editor-branding">
-                    <span class="editor-logo">🎨</span>
                     <h2>Editor</h2>
                 </div>
                 <button class="editor-close" id="editorToggle" title="Toggle Editor">
@@ -150,8 +146,8 @@
                                 <input type="checkbox" id="darkModeToggle">
                                 <span class="toggle-slider"></span>
                                 <span class="toggle-labels">
-                                    <span class="light-label">☀️ Light</span>
-                                    <span class="dark-label">🌙 Dark</span>
+                                    <span class="light-label">Light</span>
+                                    <span class="dark-label">Dark</span>
                                 </span>
                             </label>
                         </div>
@@ -263,7 +259,7 @@
 
                 <div class="editor-actions">
                     <button class="btn btn-primary" id="saveConfig">
-                        💾 Save Changes
+                        Save Changes
                     </button>
                     <button class="btn btn-secondary" id="generateLink">
                         Generate Link →
@@ -285,7 +281,7 @@
                     </div>
                     <div class="link-box">
                         <input type="text" id="generatedLink" readonly>
-                        <button class="btn-copy" id="copyLink">📋 Copy</button>
+                        <button class="btn-copy" id="copyLink">Copy</button>
                     </div>
                     <p class="link-hint">Share this link to show your customized portfolio!</p>
                 </div>
@@ -294,7 +290,7 @@
 
         <!-- Editor Toggle Button (when collapsed) -->
         <button class="editor-float-btn" id="floatBtn" style="display: none;">
-            ✏️ Edit Portfolio
+            Edit Portfolio
         </button>
     </div>
 
@@ -302,7 +298,7 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
-                <a href="index.html">Portfolio</a>
+                <a href="index.html">Craftfolio</a>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
@@ -321,7 +317,7 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <div class="template-badge">
-                <span>🎨 Customize This Template</span>
+                <span>Customize This Template</span>
             </div>
             <h1 class="hero-title">
                 <span class="greeting">Hi, I'm</span>
@@ -332,7 +328,7 @@
             <div class="hero-buttons">
                 <a href="#portfolio" class="btn btn-primary">View My Work</a>
                 <button class="btn btn-secondary" id="openEditor">
-                    ✏️ Customize This Template
+                    Customize This Template
                 </button>
             </div>
         </div>
@@ -417,15 +413,15 @@
             <div class="contact-content">
                 <div class="contact-info">
                     <div class="contact-item">
-                        <h3>📧 Email</h3>
+                        <h3>Email</h3>
                         <p><a href="mailto:your.email@example.com">your.email@example.com</a></p>
                     </div>
                     <div class="contact-item">
-                        <h3>📱 Phone</h3>
+                        <h3>Phone</h3>
                         <p><a href="tel:+1234567890">+123 456 7890</a></p>
                     </div>
                     <div class="contact-item">
-                        <h3>📍 Location</h3>
+                        <h3>Location</h3>
                         <p>Your City, Country</p>
                     </div>
                 </div>
@@ -448,7 +444,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Your Name. All rights reserved.</p>
+            <p>&copy; 2025 Craftfolio. All rights reserved.</p>
         </div>
     </footer>
 
