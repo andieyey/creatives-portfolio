@@ -247,15 +247,18 @@
         if (hasSharedConfig) {
             editorPanel.style.display = 'none';
             floatBtn.style.display = 'none';
+            document.body.classList.add('editor-collapsed');
             if (openEditorBtn) {
                 openEditorBtn.style.display = 'none';
             }
             // Update badge to show it's a portfolio
             const badge = document.querySelector('.template-badge span');
             if (badge) {
-                badge.textContent = '👤 Portfolio';
+                badge.textContent = 'Portfolio';
             }
         } else {
+            // Editor is open by default, so ensure body doesn't have collapsed class
+            document.body.classList.remove('editor-collapsed');
             attachEventListeners();
         }
     }
@@ -589,6 +592,7 @@
     // Toggle editor panel
     function toggleEditor() {
         editorPanel.classList.toggle('collapsed');
+        document.body.classList.toggle('editor-collapsed', editorPanel.classList.contains('collapsed'));
         floatBtn.style.display = editorPanel.classList.contains('collapsed') ? 'block' : 'none';
     }
 
