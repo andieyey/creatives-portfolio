@@ -2,6 +2,10 @@
 (function() {
     'use strict';
 
+    // Check authentication first
+    let currentUser = null;
+    let userPortfolios = [];
+
     // Check if URL has parameters (shared portfolio)
     const urlParams = new URLSearchParams(window.location.search);
     const portfolioId = urlParams.get('id');
@@ -10,13 +14,57 @@
     // Store current portfolio ID
     let currentPortfolioId = portfolioId || localStorage.getItem('portfolioId') || null;
 
-    // Load configuration from database or localStorage or default
-    let currentConfig = null;
-    loadConfiguration().then(config => {
+    // Initialize authentication and load configuration
+    checkAuth().then(() => {
+        return loadConfiguration();
+    }).then(config => {
         currentConfig = config;
         window.currentConfig = currentConfig;
         init();
     });
+
+    // Check authentication status
+    async function checkAuth() {
+        try {
+            const response = await fetch('/api/auth/session');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.authenticated) {
+                    currentUser = data.user;
+                    // Load user's portfolios
+                    await loadUserPortfolios();
+                    return true;
+                }
+            }
+        } catch (error) {
+            console.log('Not authenticated');
+        }
+        
+        // If not authenticated and not viewing shared portfolio, redirect to sign in
+        if (!hasSharedConfig && !currentUser) {
+            window.location.href = '/auth.html?callbackUrl=' + encodeURIComponent(window.location.href);
+            return false;
+        }
+        return false;
+    }
+
+    // Load user's portfolio list
+    async function loadUserPortfolios() {
+        try {
+            const response = await fetch('/api/list-portfolios');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    userPortfolios = data.portfolios;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load user portfolios:', error);
+        }
+    }
+
+    // Load configuration from database or localStorage or default
+    let currentConfig = null;
 
     // Onboarding
     let currentStep = 1;
@@ -248,6 +296,12 @@
     function init() {
         populateForm();
         applyConfiguration();
+        
+        // Show user info if authenticated
+        if (currentUser) {
+            showUserInfo();
+            renderPortfoliosList();
+        }
         
         // If it's a shared portfolio, completely hide the editor
         if (hasSharedConfig) {
@@ -892,6 +946,81 @@
     // Load projects when initializing
     if (projectsList && !hasSharedConfig) {
         loadProjects();
+    }
+
+    // Auth UI Functions
+    function showUserInfo() {
+        if (!currentUser) return;
+        
+        const userInfo = document.getElementById('userInfo');
+        const userName = document.getElementById('userName');
+        const userAvatar = document.getElementById('userAvatar');
+        const signOutBtn = document.getElementById('signOutBtn');
+        
+        if (userInfo && userName) {
+            userName.textContent = currentUser.name || currentUser.email;
+            if (userAvatar && currentUser.image) {
+                userAvatar.src = currentUser.image;
+                userAvatar.style.display = 'inline-block';
+            }
+            userInfo.style.display = 'flex';
+            userInfo.style.alignItems = 'center';
+        }
+        
+        if (signOutBtn) {
+            signOutBtn.style.display = 'inline-block';
+            signOutBtn.addEventListener('click', signOut);
+        }
+    }
+    
+    function signOut() {
+        if (confirm('Sign out? Your portfolios will remain saved in your account.')) {
+            window.location.href = '/api/auth/signout';
+        }
+    }
+    
+    function renderPortfoliosList() {
+        const portfoliosList = document.getElementById('portfoliosList');
+        if (!portfoliosList) return;
+        
+        if (userPortfolios.length === 0) {
+            portfoliosList.innerHTML = '<p style="color: #64748b; text-align: center; padding: 2rem;">No portfolios yet. Create your first one!</p>';
+            return;
+        }
+        
+        portfoliosList.innerHTML = userPortfolios.map(portfolio => `
+            <div class="portfolio-item" data-id="${portfolio.id}" style="padding: 1rem; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h4 style="margin: 0 0 4px 0; font-size: 1rem;">${portfolio.name}</h4>
+                        <p style="margin: 0; font-size: 0.85rem; color: #64748b;">Updated: ${new Date(portfolio.updatedAt).toLocaleDateString()}</p>
+                    </div>
+                    <button class="load-portfolio-btn" data-id="${portfolio.id}" style="padding: 8px 16px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Load
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        
+        // Add click handlers
+        portfoliosList.querySelectorAll('.load-portfolio-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                window.location.href = `/editor.html?id=${id}`;
+            });
+        });
+    }
+    
+    // New Portfolio button
+    const newPortfolioBtn = document.getElementById('newPortfolioBtn');
+    if (newPortfolioBtn) {
+        newPortfolioBtn.addEventListener('click', () => {
+            if (confirm('Create a new portfolio? Current unsaved changes will be lost.')) {
+                localStorage.removeItem('portfolioId');
+                window.location.href = '/editor.html';
+            }
+        });
     }
 
     // Initialize when DOM is ready
