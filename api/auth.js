@@ -1,6 +1,6 @@
-const NextAuth = require('next-auth').default;
-const GoogleProvider = require('next-auth/providers/google').default;
-const { kv } = require('@vercel/kv');
+import NextAuth from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { kv } from '@vercel/kv';
 
 // Custom KV adapter for NextAuth
 const KVAdapter = {
@@ -110,7 +110,6 @@ const authHandler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
 });
 
-module.exports = async function handler(req, res) {
-  // Handle all NextAuth routes
+export default async function handler(req, res) {
   return await authHandler(req, res);
 }
