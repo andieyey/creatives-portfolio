@@ -522,17 +522,15 @@ body {
     width: 100%;
     border: none;
     cursor: pointer;
-   Template Info Section */
+}
+
+/* Template Info Section */
 .template-info {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: var(--white);
     padding: 80px 20px;
 }
-btn-download {
-        display: none;
-    }
 
-    .
 .template-info-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
