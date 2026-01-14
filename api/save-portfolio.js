@@ -1,5 +1,7 @@
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 import { getToken } from 'next-auth/jwt';
+
+const redis = new Redis(process.env.REDIS_URL);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -32,16 +34,17 @@ export default async function handler(req, res) {
       updatedAt: new Date().toISOString()
     };
 
-    // Store portfolio config in Vercel KV with 1 year expiration
-    await kv.set(`portfolio:${id}`, portfolioData, { ex: 31536000 });
+    // Store portfolio config in Redis with 1 year expiration
+    await redis.set(`portfolio:${id}`, JSON.stringify(portfolioData), 'EX', 31536000);
 
     // Add to user's portfolio list
     const userPortfoliosKey = `user:${userId}:portfolios`;
-    const userPortfolios = await kv.get(userPortfoliosKey) || [];
+    const userPortfoliosData = await redis.get(userPortfoliosKey);
+    const userPortfolios = userPortfoliosData ? JSON.parse(userPortfoliosData) : [];
     
     if (!userPortfolios.includes(id)) {
       userPortfolios.push(id);
-      await kv.set(userPortfoliosKey, userPortfolios, { ex: 31536000 });
+      await redis.set(userPortfoliosKey, JSON.stringify(userPortfolios), 'EX', 31536000);
     }
 
     return res.status(200).json({ 

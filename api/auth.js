@@ -1,79 +1,89 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 
-// Custom KV adapter for NextAuth
-const KVAdapter = {
+// Initialize Redis client
+const redis = new Redis(process.env.REDIS_URL);
+
+// Custom Redis adapter for NextAuth
+const RedisAdapter = {
   async createUser(user) {
     const id = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const userData = { ...user, id, createdAt: new Date().toISOString() };
-    await kv.set(`user:${id}`, userData);
-    await kv.set(`user:email:${user.email}`, id);
+    await redis.set(`user:${id}`, JSON.stringify(userData));
+    await redis.set(`user:email:${user.email}`, id);
     return userData;
   },
   
   async getUser(id) {
-    return await kv.get(`user:${id}`);
+    const data = await redis.get(`user:${id}`);
+    return data ? JSON.parse(data) : null;
   },
   
   async getUserByEmail(email) {
-    const userId = await kv.get(`user:email:${email}`);
+    const userId = await redis.get(`user:email:${email}`);
     if (!userId) return null;
-    return await kv.get(`user:${userId}`);
+    const data = await redis.get(`user:${userId}`);
+    return data ? JSON.parse(data) : null;
   },
   
   async getUserByAccount({ provider, providerAccountId }) {
-    const userId = await kv.get(`account:${provider}:${providerAccountId}`);
+    const userId = await redis.get(`account:${provider}:${providerAccountId}`);
     if (!userId) return null;
-    return await kv.get(`user:${userId}`);
+    const data = await redis.get(`user:${userId}`);
+    return data ? JSON.parse(data) : null;
   },
   
   async updateUser(user) {
-    const existing = await kv.get(`user:${user.id}`);
+    const data = await redis.get(`user:${user.id}`);
+    const existing = data ? JSON.parse(data) : {};
     const updated = { ...existing, ...user };
-    await kv.set(`user:${user.id}`, updated);
+    await redis.set(`user:${user.id}`, JSON.stringify(updated));
     return updated;
   },
   
   async linkAccount(account) {
-    await kv.set(`account:${account.provider}:${account.providerAccountId}`, account.userId);
+    await redis.set(`account:${account.provider}:${account.providerAccountId}`, account.userId);
     return account;
   },
   
   async createSession(session) {
-    await kv.set(`session:${session.sessionToken}`, session, { ex: 2592000 }); // 30 days
+    await redis.set(`session:${session.sessionToken}`, JSON.stringify(session), 'EX', 2592000); // 30 days
     return session;
   },
   
   async getSessionAndUser(sessionToken) {
-    const session = await kv.get(`session:${sessionToken}`);
-    if (!session) return null;
-    const user = await kv.get(`user:${session.userId}`);
+    const sessionData = await redis.get(`session:${sessionToken}`);
+    if (!sessionData) return null;
+    const session = JSON.parse(sessionData);
+    const userData = await redis.get(`user:${session.userId}`);
+    const user = userData ? JSON.parse(userData) : null;
     return { session, user };
   },
   
   async updateSession(session) {
-    const existing = await kv.get(`session:${session.sessionToken}`);
+    const data = await redis.get(`session:${session.sessionToken}`);
+    const existing = data ? JSON.parse(data) : {};
     const updated = { ...existing, ...session };
-    await kv.set(`session:${session.sessionToken}`, updated, { ex: 2592000 });
+    await redis.set(`session:${session.sessionToken}`, JSON.stringify(updated), 'EX', 2592000);
     return updated;
   },
   
   async deleteSession(sessionToken) {
-    await kv.del(`session:${sessionToken}`);
+    await redis.del(`session:${sessionToken}`);
   },
   
   async createVerificationToken(token) {
-    await kv.set(`verification:${token.identifier}:${token.token}`, token, { ex: 86400 }); // 24 hours
+    await redis.set(`verification:${token.identifier}:${token.token}`, JSON.stringify(token), 'EX', 86400); // 24 hours
     return token;
   },
   
   async useVerificationToken({ identifier, token }) {
     const key = `verification:${identifier}:${token}`;
-    const verificationToken = await kv.get(key);
-    if (!verificationToken) return null;
-    await kv.del(key);
-    return verificationToken;
+    const data = await redis.get(key);
+    if (!data) return null;
+    await redis.del(key);
+    return JSON.parse(data);
   }
 };
 
@@ -84,7 +94,7 @@ const authHandler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     })
   ],
-  adapter: KVAdapter,
+  adapter: RedisAdapter,
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days

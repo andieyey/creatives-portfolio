@@ -1,4 +1,6 @@
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
+
+const redis = new Redis(process.env.REDIS_URL);
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -12,12 +14,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Portfolio ID is required' });
     }
 
-    // Retrieve portfolio from Vercel KV
-    const portfolioData = await kv.get(`portfolio:${id}`);
+    // Retrieve portfolio from Redis
+    const data = await redis.get(`portfolio:${id}`);
 
-    if (!portfolioData) {
+    if (!data) {
       return res.status(404).json({ error: 'Portfolio not found' });
     }
+
+    const portfolioData = JSON.parse(data);
 
     // Return the config (backward compatible with old format)
     const config = portfolioData.config || portfolioData;

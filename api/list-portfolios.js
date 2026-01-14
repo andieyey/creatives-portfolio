@@ -1,5 +1,7 @@
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 import { getToken } from 'next-auth/jwt';
+
+const redis = new Redis(process.env.REDIS_URL);
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -17,13 +19,15 @@ export default async function handler(req, res) {
     const userId = token.id || token.sub;
 
     // Get user's portfolio list
-    const portfolioIds = await kv.get(`user:${userId}:portfolios`) || [];
+    const portfolioIdsData = await redis.get(`user:${userId}:portfolios`);
+    const portfolioIds = portfolioIdsData ? JSON.parse(portfolioIdsData) : [];
 
     // Fetch portfolio details
     const portfolios = [];
     for (const id of portfolioIds) {
-      const portfolioData = await kv.get(`portfolio:${id}`);
-      if (portfolioData) {
+      const data = await redis.get(`portfolio:${id}`);
+      if (data) {
+        const portfolioData = JSON.parse(data);
         const config = portfolioData.config || portfolioData;
         portfolios.push({
           id,
