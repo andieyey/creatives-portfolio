@@ -1,0 +1,9 @@
+{
+  "name": "craftfolio",
+  "version": "1.0.0",
+  "description": "Creative portfolio builder with live customization",
+  "type": "module",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
+}

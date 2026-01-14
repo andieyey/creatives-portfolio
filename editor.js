@@ -4,13 +4,19 @@
 
     // Check if URL has parameters (shared portfolio)
     const urlParams = new URLSearchParams(window.location.search);
-    const hasSharedConfig = urlParams.has('config');
-
-    // Load configuration from URL or localStorage or default
-    let currentConfig = loadConfiguration();
+    const portfolioId = urlParams.get('id');
+    const hasSharedConfig = !!portfolioId;
     
-    // Expose for templates
-    window.currentConfig = currentConfig;
+    // Store current portfolio ID
+    let currentPortfolioId = portfolioId || localStorage.getItem('portfolioId') || null;
+
+    // Load configuration from database or localStorage or default
+    let currentConfig = null;
+    loadConfiguration().then(config => {
+        currentConfig = config;
+        window.currentConfig = currentConfig;
+        init();
+    });
 
     // Onboarding
     let currentStep = 1;
@@ -264,19 +270,23 @@
     }
 
     // Load configuration
-    function loadConfiguration() {
-        // First, check URL parameters (shared portfolio)
-        if (hasSharedConfig) {
+    async function loadConfiguration() {
+        // First, check if there's a portfolio ID (from URL or localStorage)
+        if (currentPortfolioId) {
             try {
-                const encoded = urlParams.get('config');
-                const decoded = atob(encoded);
-                return JSON.parse(decoded);
+                const response = await fetch(`/api/get-portfolio?id=${currentPortfolioId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.config) {
+                        return data.config;
+                    }
+                }
             } catch (e) {
-                console.error('Invalid shared configuration');
+                console.error('Failed to load portfolio from database:', e);
             }
         }
 
-        // Second, check localStorage (user's saved work)
+        // Fallback to localStorage
         const saved = localStorage.getItem('portfolioConfig');
         if (saved) {
             try {
@@ -597,11 +607,14 @@
     }
 
     // Generate shareable link
-    function generateShareableLink() {
-        const configString = JSON.stringify(currentConfig);
-        const encoded = btoa(configString);
+    async function generateShareableLink() {
+        // First save to get/create portfolio ID
+        if (!currentPortfolioId) {
+            await saveConfiguration();
+        }
+        
         const baseUrl = window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}?config=${encoded}`;
+        const shareUrl = `${baseUrl}?id=${currentPortfolioId}`;
         
         generatedLink.value = shareUrl;
         linkResult.style.display = 'block';
@@ -611,13 +624,38 @@
     }
 
     // Save configuration
-    function saveConfiguration() {
-        // Save to localStorage
+    async function saveConfiguration() {
+        try {
+            // Save to API
+            const response = await fetch('/api/save-portfolio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    portfolioId: currentPortfolioId,
+                    config: currentConfig
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.portfolioId) {
+                    currentPortfolioId = data.portfolioId;
+                    // Store ID in localStorage for persistence
+                    localStorage.setItem('portfolioId', currentPortfolioId);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to save to database:', error);
+        }
+
+        // Also save to localStorage as backup
         localStorage.setItem('portfolioConfig', JSON.stringify(currentConfig));
         
         // Auto-regenerate the shareable link if it was previously generated
         if (linkResult && linkResult.style.display === 'block') {
-            generateShareableLink();
+            await generateShareableLink();
         }
         
         // Show save notification
