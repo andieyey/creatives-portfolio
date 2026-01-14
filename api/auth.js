@@ -90,7 +90,7 @@ const RedisAdapter = {
   }
 };
 
-const authHandler = NextAuth({
+const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -121,8 +121,9 @@ const authHandler = NextAuth({
     }
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
 
 export default async function handler(req, res) {
-  return await authHandler(req, res);
+  // NextAuth handler for all auth routes
+  return await NextAuth(req, res, authOptions);
 }
