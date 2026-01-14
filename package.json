@@ -4,6 +4,8 @@
   "description": "Creative portfolio builder with live customization",
   "type": "module",
   "dependencies": {
-    "@vercel/kv": "^1.0.1"
+    "@vercel/kv": "^1.0.1",
+    "next-auth": "^4.24.5",
+    "@auth/core": "^0.18.6"
   }
 }
