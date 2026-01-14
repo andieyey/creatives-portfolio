@@ -1,6 +1,9 @@
-import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
+import { createRequire } from 'module';
 import Redis from 'ioredis';
+
+const require = createRequire(import.meta.url);
+const NextAuth = require('next-auth').default;
+const GoogleProvider = require('next-auth/providers/google').default;
 
 // Initialize Redis client
 const redis = new Redis(process.env.REDIS_URL);
@@ -89,7 +92,7 @@ const RedisAdapter = {
 
 const authHandler = NextAuth({
   providers: [
-    Google({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     })
