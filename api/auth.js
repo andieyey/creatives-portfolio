@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google.js';
+import Google from 'next-auth/providers/google';
 import Redis from 'ioredis';
 
 // Initialize Redis client
