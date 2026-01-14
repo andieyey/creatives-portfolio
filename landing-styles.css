@@ -63,13 +63,9 @@ body {
     align-items: center;
     gap: 0.5rem;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--dark);
     letter-spacing: -0.02em;
-}
-
-.logo-icon {
-    font-size: 1.8rem;
 }
 
 .nav-menu {
@@ -468,12 +464,6 @@ body {
     transform: translateY(-8px);
     border-color: rgba(15, 23, 42, 0.15);
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-}
-
-.feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.25rem;
-    opacity: 0.9;
 }
 
 .feature-card h3 {
