@@ -1,4 +1,5 @@
 import { kv } from '@vercel/kv';
+import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -6,6 +7,14 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Get user session
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Unauthorized. Please sign in.' });
+    }
+
+    const userId = token.id || token.sub;
     const { portfolioId, config } = req.body;
 
     if (!config) {
@@ -15,8 +24,25 @@ export default async function handler(req, res) {
     // Generate unique ID if not provided
     const id = portfolioId || generateId();
 
+    // Store portfolio with user association
+    const portfolioData = {
+      userId,
+      config,
+      createdAt: portfolioId ? undefined : new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
     // Store portfolio config in Vercel KV with 1 year expiration
-    await kv.set(`portfolio:${id}`, config, { ex: 31536000 });
+    await kv.set(`portfolio:${id}`, portfolioData, { ex: 31536000 });
+
+    // Add to user's portfolio list
+    const userPortfoliosKey = `user:${userId}:portfolios`;
+    const userPortfolios = await kv.get(userPortfoliosKey) || [];
+    
+    if (!userPortfolios.includes(id)) {
+      userPortfolios.push(id);
+      await kv.set(userPortfoliosKey, userPortfolios, { ex: 31536000 });
+    }
 
     return res.status(200).json({ 
       success: true, 

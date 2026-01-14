@@ -12,12 +12,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Portfolio ID is required' });
     }
 
-    // Retrieve portfolio config from Vercel KV
-    const config = await kv.get(`portfolio:${id}`);
+    // Retrieve portfolio from Vercel KV
+    const portfolioData = await kv.get(`portfolio:${id}`);
 
-    if (!config) {
+    if (!portfolioData) {
       return res.status(404).json({ error: 'Portfolio not found' });
     }
+
+    // Return the config (backward compatible with old format)
+    const config = portfolioData.config || portfolioData;
 
     return res.status(200).json({ 
       success: true, 
