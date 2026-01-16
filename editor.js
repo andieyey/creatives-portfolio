@@ -26,18 +26,19 @@
     // Check authentication status
     async function checkAuth() {
         try {
-            const response = await fetch('/api/auth/session');
+            const response = await fetch('/api/auth?action=session');
             if (response.ok) {
                 const data = await response.json();
-                if (data.authenticated) {
+                if (data.authenticated && data.user) {
                     currentUser = data.user;
+                    updateUserUI();
                     // Load user's portfolios
                     await loadUserPortfolios();
                     return true;
                 }
             }
         } catch (error) {
-            console.log('Not authenticated');
+            console.log('Not authenticated:', error);
         }
         
         // If not authenticated and not viewing shared portfolio, redirect to sign in
@@ -46,6 +47,22 @@
             return false;
         }
         return false;
+    }
+
+    // Update user UI
+    function updateUserUI() {
+        if (currentUser) {
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            
+            if (userInfo && userAvatar && userName) {
+                userInfo.style.display = 'flex';
+                userInfo.style.alignItems = 'center';
+                userAvatar.src = currentUser.picture || '';
+                userName.textContent = currentUser.name || currentUser.email;
+            }
+        }
     }
 
     // Load user's portfolio list

@@ -118,7 +118,7 @@ export default async function handler(req, res) {
     }
     
     // Handle session check
-    if (action === 'session' || req.method === 'GET') {
+    if (action === 'session' || (req.method === 'GET' && !code && !action)) {
       const cookies = req.headers.cookie?.split(';').reduce((acc, cookie) => {
         const [key, value] = cookie.trim().split('=');
         acc[key] = value;
@@ -128,23 +128,31 @@ export default async function handler(req, res) {
       const sessionToken = cookies?.session;
       
       if (!sessionToken) {
-        return res.status(401).json({ error: 'Not authenticated' });
+        return res.status(200).json({ authenticated: false });
       }
       
       const sessionData = await redis.get(`session:${sessionToken}`);
       if (!sessionData) {
-        return res.status(401).json({ error: 'Session expired' });
+        return res.status(200).json({ authenticated: false });
       }
       
       const session = JSON.parse(sessionData);
       const userData = await redis.get(`user:${session.userId}`);
       
       if (!userData) {
-        return res.status(401).json({ error: 'User not found' });
+        return res.status(200).json({ authenticated: false });
       }
       
+      const user = JSON.parse(userData);
+      
       return res.status(200).json({ 
-        user: JSON.parse(userData),
+        authenticated: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          picture: user.picture
+        },
         expires: session.expires 
       });
     }
