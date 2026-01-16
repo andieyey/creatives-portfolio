@@ -1,100 +1,109 @@
-/* Onboarding Overlay */
-.onboarding-overlay {
+/* Onboarding Tooltip */
+.onboarding-tooltip {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
+    z-index: 10001;
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    max-width: 320px;
+    animation: tooltipFadeIn 0.3s ease;
+    pointer-events: auto;
+}
+
+.onboarding-tooltip.hidden {
+    display: none;
+}
+
+.onboarding-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fadeIn 0.3s ease;
+    border-radius: 6px;
+    transition: all 0.2s ease;
 }
 
-.onboarding-overlay.hidden {
-    display: none;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.onboarding-modal {
-    background: white;
-    border-radius: 16px;
-    max-width: 500px;
-    width: 90%;
-    padding: 3rem;
-    position: relative;
-    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.onboarding-step {
-    display: none;
-    text-align: center;
-}
-
-.onboarding-step.active {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-.onboarding-modal h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
+.onboarding-close:hover {
+    background: #f1f5f9;
     color: #0f172a;
-    margin-bottom: 1rem;
-    letter-spacing: -0.02em;
-    margin-top: 1rem;
 }
 
-.onboarding-modal p {
-    font-size: 1.05rem;
+.onboarding-step-indicator {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+}
+
+.step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.step-dot.active {
+    background: #0f172a;
+    width: 24px;
+    border-radius: 4px;
+}
+
+.step-dot.completed {
+    background: #94a3b8;
+}
+
+.onboarding-content h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.onboarding-content p {
+    font-size: 0.95rem;
     color: #64748b;
-    line-height: 1.6;
-    margin-bottom: 2rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
 }
 
 .onboarding-actions {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
+    gap: 0.75rem;
+    justify-content: flex-end;
 }
 
 .btn-onboarding,
 .btn-onboarding-skip {
-    padding: 12px 28px;
-    border-radius: 8px;
-    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     border: none;
 }
 
 .btn-onboarding {
     background: #0f172a;
     color: white;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .btn-onboarding:hover {
     background: #334155;
-    transform: translateY(-2px);
 }
 
 .btn-onboarding-skip {
@@ -104,6 +113,73 @@
 
 .btn-onboarding-skip:hover {
     color: #0f172a;
+    background: #f1f5f9;
+}
+
+/* Onboarding Highlight */
+.onboarding-highlight {
+    position: fixed;
+    z-index: 10000;
+    border: 3px solid #0f172a;
+    border-radius: 8px;
+    pointer-events: none;
+    animation: highlightPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
+}
+
+.onboarding-highlight.hidden {
+    display: none;
+}
+
+/* Restart Tour Button */
+.btn-restart-tour {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-restart-tour:hover {
+    background: #f8fafc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.btn-restart-tour.hidden {
+    display: none;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(15, 23, 42, 0.2);
+    }
 }
 
 /* Editor Panel */

@@ -107,22 +107,152 @@
     let currentConfig = null;
 
     // Onboarding
-    let currentStep = 1;
-    const onboardingOverlay = document.getElementById('onboardingOverlay');
+    let currentStep = 0;
+    const onboardingTooltip = document.getElementById('onboardingTooltip');
+    const onboardingHighlight = document.getElementById('onboardingHighlight');
+    const restartTourBtn = document.getElementById('restartTourBtn');
+    
+    const onboardingSteps = [
+        {
+            title: "Welcome to Craftfolio!",
+            text: "Edit your portfolio details in the sidebar. Everything updates live on the right.",
+            target: ".editor-panel",
+            position: "left"
+        },
+        {
+            title: "Live Preview",
+            text: "Watch your changes appear instantly here. What you see is what you get.",
+            target: "#preview",
+            position: "right"
+        },
+        {
+            title: "Generate Your Link",
+            text: "When you're ready, click this button to get a shareable link to your portfolio.",
+            target: "#generateLink",
+            position: "top"
+        }
+    ];
+
     
     // Show onboarding if first visit and not shared
     if (!hasSharedConfig && !localStorage.getItem('onboardingCompleted')) {
-        showOnboarding();
-    } else if (onboardingOverlay) {
-        onboardingOverlay.classList.add('hidden');
+        setTimeout(() => showOnboarding(), 800);
+    } else {
+        // Show restart tour button if onboarding was completed
+        if (localStorage.getItem('onboardingCompleted') && restartTourBtn) {
+            restartTourBtn.classList.remove('hidden');
+        }
+    }
+    
+    function showOnboarding() {
+        currentStep = 0;
+        showStep(currentStep);
+        if (restartTourBtn) {
+            restartTourBtn.classList.add('hidden');
+        }
+    }
+    
+    function showStep(stepIndex) {
+        if (stepIndex >= onboardingSteps.length) {
+            closeOnboarding();
+            return;
+        }
+        
+        const step = onboardingSteps[stepIndex];
+        const targetElement = document.querySelector(step.target);
+        
+        if (!targetElement) {
+            console.warn('Onboarding target not found:', step.target);
+            // Try next step after a delay
+            setTimeout(() => {
+                currentStep++;
+                if (currentStep < onboardingSteps.length) {
+                    showStep(currentStep);
+                } else {
+                    closeOnboarding();
+                }
+            }, 500);
+            return;
+        }
+        
+        // Update tooltip content
+        document.getElementById('onboardingTitle').textContent = step.title;
+        document.getElementById('onboardingText').textContent = step.text;
+        document.getElementById('onboardingBtnText').textContent = stepIndex < onboardingSteps.length - 1 ? 'Next' : 'Done';
+        
+        // Update step indicators
+        const dots = document.querySelectorAll('.step-dot');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === stepIndex);
+            dot.classList.toggle('completed', i < stepIndex);
+        });
+        
+        // Position tooltip and highlight
+        setTimeout(() => {
+            positionTooltip(targetElement, step.position);
+            highlightElement(targetElement);
+        }, 50);
+        
+        // Show tooltip
+        if (onboardingTooltip) {
+            onboardingTooltip.classList.remove('hidden');
+        }
+    }
+    
+    function positionTooltip(targetElement, position) {
+        if (!targetElement || !onboardingTooltip) return;
+        
+        const rect = targetElement.getBoundingClientRect();
+        const tooltipRect = onboardingTooltip.getBoundingClientRect();
+        const offset = 20;
+        
+        let top, left;
+        
+        switch(position) {
+            case 'left':
+                top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                left = rect.left - tooltipRect.width - offset;
+                break;
+            case 'right':
+                top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                left = rect.right + offset;
+                break;
+            case 'top':
+                top = rect.top - tooltipRect.height - offset;
+                left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                break;
+            case 'bottom':
+                top = rect.bottom + offset;
+                left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                break;
+        }
+        
+        // Keep tooltip in viewport
+        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+        
+        onboardingTooltip.style.top = top + 'px';
+        onboardingTooltip.style.left = left + 'px';
+    }
+    
+    function highlightElement(element) {
+        if (!element || !onboardingHighlight) return;
+        
+        const rect = element.getBoundingClientRect();
+        
+        onboardingHighlight.style.top = (rect.top - 8) + 'px';
+        onboardingHighlight.style.left = (rect.left - 8) + 'px';
+        onboardingHighlight.style.width = (rect.width + 16) + 'px';
+        onboardingHighlight.style.height = (rect.height + 16) + 'px';
+        onboardingHighlight.classList.remove('hidden');
     }
     
     window.nextOnboardingStep = function() {
-        const steps = document.querySelectorAll('.onboarding-step');
-        steps[currentStep - 1].classList.remove('active');
         currentStep++;
-        if (currentStep <= steps.length) {
-            steps[currentStep - 1].classList.add('active');
+        if (currentStep < onboardingSteps.length) {
+            showStep(currentStep);
+        } else {
+            closeOnboarding();
         }
     };
     
@@ -130,21 +260,22 @@
         closeOnboarding();
     };
     
-    window.closeOnboarding = function() {
-        if (onboardingOverlay) {
-            onboardingOverlay.style.animation = 'fadeOut 0.3s ease';
-            setTimeout(() => {
-                onboardingOverlay.classList.add('hidden');
-                localStorage.setItem('onboardingCompleted', 'true');
-            }, 300);
-        }
+    window.restartOnboarding = function() {
+        showOnboarding();
     };
     
-    function showOnboarding() {
-        if (onboardingOverlay) {
-            onboardingOverlay.classList.remove('hidden');
+    window.closeOnboarding = function() {
+        if (onboardingTooltip) {
+            onboardingTooltip.classList.add('hidden');
         }
-    }
+        if (onboardingHighlight) {
+            onboardingHighlight.classList.add('hidden');
+        }
+        if (restartTourBtn) {
+            restartTourBtn.classList.remove('hidden');
+        }
+        localStorage.setItem('onboardingCompleted', 'true');
+    };
 
     // Tab functionality
     const tabBtns = document.querySelectorAll('.tab-btn');

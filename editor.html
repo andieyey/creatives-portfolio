@@ -9,35 +9,37 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Onboarding Overlay -->
-    <div class="onboarding-overlay" id="onboardingOverlay">
-        <div class="onboarding-modal">
-            <div class="onboarding-step active" data-step="1">
-                <h2>Welcome to Craftfolio</h2>
-                <p>In the next 3 minutes, you'll have a live portfolio ready to share. No sign up needed.</p>
-                <div class="onboarding-actions">
-                    <button class="btn-onboarding" onclick="nextOnboardingStep()">Let's go →</button>
-                </div>
+    <!-- Onboarding Tooltip -->
+    <div class="onboarding-tooltip hidden" id="onboardingTooltip">
+        <button class="onboarding-close" onclick="skipOnboarding()" title="Close">×</button>
+        <div class="onboarding-content">
+            <div class="onboarding-step-indicator">
+                <span class="step-dot active"></span>
+                <span class="step-dot"></span>
+                <span class="step-dot"></span>
             </div>
-            
-            <div class="onboarding-step" data-step="2">
-                <h2>Edit on the left</h2>
-                <p>Type your info in the sidebar. Everything updates live on the right side.</p>
-                <div class="onboarding-actions">
-                    <button class="btn-onboarding-skip" onclick="skipOnboarding()">Skip</button>
-                    <button class="btn-onboarding" onclick="nextOnboardingStep()">Got it →</button>
-                </div>
-            </div>
-            
-            <div class="onboarding-step" data-step="3">
-                <h2>Share your link</h2>
-                <p>When you're done, click "Generate Link" to get a URL you can share anywhere.</p>
-                <div class="onboarding-actions">
-                    <button class="btn-onboarding" onclick="closeOnboarding()">Start editing →</button>
-                </div>
+            <h3 id="onboardingTitle"></h3>
+            <p id="onboardingText"></p>
+            <div class="onboarding-actions">
+                <button class="btn-onboarding-skip" onclick="skipOnboarding()">Skip tour</button>
+                <button class="btn-onboarding" onclick="nextOnboardingStep()">
+                    <span id="onboardingBtnText">Next</span> →
+                </button>
             </div>
         </div>
     </div>
+    
+    <!-- Onboarding Highlight -->
+    <div class="onboarding-highlight hidden" id="onboardingHighlight"></div>
+    
+    <!-- Restart Onboarding Button (hidden by default) -->
+    <button class="btn-restart-tour hidden" id="restartTourBtn" onclick="restartOnboarding()" title="Restart tour">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Tour</span>
+    </button>
 
     <!-- Editor Panel -->
     <div class="editor-container">
