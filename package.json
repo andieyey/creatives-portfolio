@@ -4,7 +4,6 @@
   "description": "Creative portfolio builder with live customization",
   "type": "module",
   "dependencies": {
-    "ioredis": "^5.3.2",
-    "next-auth": "^4.24.5"
+    "ioredis": "^5.3.2"
   }
 }

@@ -199,11 +199,10 @@
         googleSignIn.addEventListener('click', async () => {
             try {
                 googleSignIn.disabled = true;
-                googleSignIn.textContent = 'Signing in...';
+                googleSignIn.textContent = 'Redirecting to Google...';
                 
-                // Use the full URL for production
-                const callbackUrl = encodeURIComponent(`${window.location.origin}/editor.html`);
-                window.location.href = `/api/auth/signin/google?callbackUrl=${callbackUrl}`;
+                // Redirect to our custom auth endpoint
+                window.location.href = '/api/auth?action=signin';
             } catch (error) {
                 showMessage('Failed to initiate sign in. Please try again.', 'error');
                 googleSignIn.disabled = false;
