@@ -172,7 +172,9 @@ export default async function handler(req, res) {
       }
       
       res.setHeader('Set-Cookie', 'session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0');
-      return res.redirect(302, '/');
+      
+      // Redirect to auth page with signedout parameter
+      return res.redirect(302, '/auth.html?signedout=true');
     }
     
     return res.status(400).json({ error: 'Invalid request' });

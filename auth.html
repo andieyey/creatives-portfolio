@@ -191,9 +191,34 @@
         // Check for URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
+        const signedOut = urlParams.get('signedout');
 
         if (error) {
             showMessage('Authentication error. Please try again.', 'error');
+        }
+        
+        if (signedOut) {
+            showMessage('You have been signed out successfully.', 'success');
+        }
+        
+        // Check if user is already authenticated
+        checkExistingSession();
+        
+        async function checkExistingSession() {
+            try {
+                const response = await fetch('/api/auth?action=session');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.authenticated) {
+                        // User is already signed in, redirect to editor
+                        const callbackUrl = urlParams.get('callbackUrl') || '/editor.html';
+                        window.location.href = callbackUrl;
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.log('No existing session');
+            }
         }
 
         googleSignIn.addEventListener('click', async () => {
