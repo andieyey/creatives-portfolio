@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Craftfolio</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .loading-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            color: white;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-screen {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .error-box {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .error-box h1 {
+            margin: 0 0 16px 0;
+            font-size: 2rem;
+        }
+        
+        .error-box p {
+            margin: 0 0 24px 0;
+            color: #64748b;
+        }
+        
+        .error-box a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #6366f1;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading portfolio...</p>
+        </div>
+    </div>
+    
+    <div class="error-screen" id="errorScreen">
+        <div class="error-box">
+            <h1>Portfolio Not Found</h1>
+            <p>This portfolio doesn't exist or has been removed.</p>
+            <a href="/">Create Your Own Portfolio</a>
+        </div>
+    </div>
+    
+    <!-- Portfolio content will be injected here -->
+    <div id="portfolioContent"></div>
+    
+    <script>
+        (async function() {
+            try {
+                // Get portfolio ID from URL
+                const pathParts = window.location.pathname.split('/');
+                const portfolioId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+                
+                if (!portfolioId || portfolioId === 'p') {
+                    showError();
+                    return;
+                }
+                
+                // Fetch portfolio from API
+                const response = await fetch(`/api/get-portfolio?id=${portfolioId}`);
+                
+                if (!response.ok) {
+                    showError();
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (!data.config) {
+                    showError();
+                    return;
+                }
+                
+                // Inject portfolio content
+                renderPortfolio(data.config);
+                
+                // Hide loading, show content
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('portfolioContent').style.display = 'block';
+                
+                // Update page title
+                if (data.config.name) {
+                    document.title = `${data.config.name} - Portfolio`;
+                }
+                
+            } catch (error) {
+                console.error('Error loading portfolio:', error);
+                showError();
+            }
+        })();
+        
+        function showError() {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('errorScreen').style.display = 'flex';
+        }
+        
+        function renderPortfolio(config) {
+            const content = document.getElementById('portfolioContent');
+            
+            // Use the same rendering as template.html
+            // For now, we'll use a simple implementation
+            content.innerHTML = `
+                <div class="portfolio-wrapper">
+                    <!-- Include the same structure as template.html -->
+                    <div id="portfolio-root"></div>
+                </div>
+            `;
+            
+            // Apply configuration
+            window.portfolioConfig = config;
+            
+            // Load template script to render portfolio
+            const script = document.createElement('script');
+            script.src = '/script.js';
+            document.body.appendChild(script);
+        }
+    </script>
+</body>
+</html>

@@ -3,5 +3,8 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/p/:id", "destination": "/portfolio-view.html" }
+  ]
 }
