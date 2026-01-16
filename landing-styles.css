@@ -488,29 +488,25 @@ body {
 }
 
 .steps-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     position: relative;
 }
 
 .step {
     display: flex;
-    gap: 2rem;
-    margin-bottom: 3.5rem;
+    gap: 2.5rem;
+    margin-bottom: 4rem;
     align-items: flex-start;
 }
 
-.step:nth-child(2) {
-    margin-left: 40px;
-}
-
-.step:nth-child(3) {
-    margin-left: 20px;
+.step:last-child {
+    margin-bottom: 0;
 }
 
 .step-number {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     background: var(--dark);
     color: white;
     border-radius: 50%;
@@ -521,17 +517,19 @@ body {
     font-weight: 600;
     flex-shrink: 0;
     position: relative;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
 }
 
 .step-number::before {
     content: '';
     position: absolute;
     width: 2px;
-    height: 60px;
-    background: rgba(15, 23, 42, 0.1);
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.05));
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 8px;
 }
 
 .step:last-child .step-number::before {
@@ -540,22 +538,23 @@ body {
 
 .step-content {
     flex: 1;
-    padding-top: 4px;
+    padding-top: 8px;
 }
 
 .step-content h3 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
     color: var(--dark);
     letter-spacing: -0.02em;
 }
 
 .step-content p {
     color: var(--gray-text);
-    line-height: 1.65;
-    font-size: 1rem;
+    line-height: 1.7;
+    font-size: 1.05rem;
     font-weight: 400;
+    max-width: 600px;
 }
 
 .cta-center {
