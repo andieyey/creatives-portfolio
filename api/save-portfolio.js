@@ -9,24 +9,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Check if user is authenticated
-    const cookies = req.headers.cookie?.split(';').reduce((acc, cookie) => {
-      const [key, value] = cookie.trim().split('=');
-      acc[key] = value;
-      return acc;
-    }, {});
-    
-    const sessionToken = cookies?.session;
-    let userId = null;
-    
-    if (sessionToken) {
-      const sessionData = await redis.get(`session:${sessionToken}`);
-      if (sessionData) {
-        const session = JSON.parse(sessionData);
-        userId = session.userId;
-      }
-    }
-
     const { portfolioId, config, editToken } = req.body;
 
     if (!config) {
@@ -37,21 +19,18 @@ export default async function handler(req, res) {
     let token = editToken;
     let isNew = false;
 
-    // If updating existing portfolio, validate edit token or ownership
+    // If updating existing portfolio, validate edit token
     if (portfolioId) {
       const existingData = await redis.get(`portfolio:${portfolioId}`);
       
       if (existingData) {
         const existing = JSON.parse(existingData);
         
-        // Check if user owns this portfolio
-        const userOwnsPortfolio = userId && existing.userId === userId;
-        
         // Check if valid edit token provided
         const validToken = editToken && existing.editTokenHash && 
           hashToken(editToken) === existing.editTokenHash;
         
-        if (!userOwnsPortfolio && !validToken) {
+        if (!validToken) {
           return res.status(403).json({ error: 'Unauthorized to edit this portfolio' });
         }
       }
@@ -64,12 +43,10 @@ export default async function handler(req, res) {
 
     // Store portfolio data
     const portfolioData = {
-      userId: userId || null, // null for anonymous users
       config,
       editTokenHash: hashToken(token),
       createdAt: isNew ? new Date().toISOString() : undefined,
-      updatedAt: new Date().toISOString(),
-      claimed: !!userId // Track if portfolio is claimed by a user
+      updatedAt: new Date().toISOString()
     };
 
     // Remove undefined fields
@@ -79,18 +56,6 @@ export default async function handler(req, res) {
 
     // Store portfolio with 1 year expiration
     await redis.set(`portfolio:${id}`, JSON.stringify(portfolioData), 'EX', 31536000);
-
-    // If user is authenticated, add to their portfolio list
-    if (userId) {
-      const userPortfoliosKey = `user:${userId}:portfolios`;
-      const userPortfoliosData = await redis.get(userPortfoliosKey);
-      const userPortfolios = userPortfoliosData ? JSON.parse(userPortfoliosData) : [];
-      
-      if (!userPortfolios.includes(id)) {
-        userPortfolios.push(id);
-        await redis.set(userPortfoliosKey, JSON.stringify(userPortfolios), 'EX', 31536000);
-      }
-    }
 
     return res.status(200).json({ 
       success: true, 

@@ -44,11 +44,7 @@
         <div class="editor-panel" id="editorPanel">
             <div class="editor-header">
                 <div class="editor-branding">
-                    <h2>Editor</h2>
-                    <div class="user-info" id="userInfo" style="display: none;">
-                        <img id="userAvatar" alt="User" style="width: 32px; height: 32px; border-radius: 50%; margin-right: 8px;">
-                        <span id="userName" style="font-size: 0.9rem; color: #64748b;"></span>
-                    </div>
+                    <h2>Craftfolio Editor</h2>
                 </div>
                 <button class="editor-close" id="editorToggle" title="Toggle Editor">
                     <span id="toggleIcon">←</span>
@@ -60,7 +56,6 @@
                     <button class="tab-btn active" data-tab="basic">Basics</button>
                     <button class="tab-btn" data-tab="about">About</button>
                     <button class="tab-btn" data-tab="projects">Projects</button>
-                    <button class="tab-btn" data-tab="my-portfolios">My Portfolios</button>
                     <button class="tab-btn" data-tab="style">Style</button>
                     <button class="tab-btn" data-tab="templates">Templates</button>
                 </div>
@@ -231,21 +226,6 @@
                     </div>
                 </div>
 
-                <div class="tab-content" data-content="my-portfolios">
-                    <div class="editor-section">
-                        <div class="section-title">
-                            <h3>My Portfolios</h3>
-                            <p class="section-description">Manage all your portfolios</p>
-                        </div>
-                        <button class="btn-secondary" id="newPortfolioBtn" style="width: 100%; margin-bottom: 1rem;">
-                            + New Portfolio
-                        </button>
-                        <div id="portfoliosList" class="portfolios-list">
-                            <!-- Portfolios will be loaded here -->
-                        </div>
-                    </div>
-                </div>
-
                 <div class="tab-content" data-content="templates">
                     <div class="editor-section">
                         <div class="section-title">
@@ -286,7 +266,6 @@
                     </button>
                     <div class="action-menu">
                         <button class="btn btn-ghost" id="resetConfig">Reset</button>
-                        <button class="btn btn-ghost" id="signOutBtn" style="display: none; color: #ef4444;">Sign Out</button>
                     </div>
                 </div>
 
