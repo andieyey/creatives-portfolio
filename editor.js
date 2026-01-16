@@ -697,6 +697,25 @@
         if (copyLinkBtn) {
             copyLinkBtn.addEventListener('click', copyToClipboard);
         }
+        
+        // New Portfolio button
+        const newPortfolioBtn = document.getElementById('newPortfolioBtn');
+        if (newPortfolioBtn) {
+            newPortfolioBtn.addEventListener('click', () => {
+                if (confirm('Create a new portfolio? Current unsaved changes will be lost.')) {
+                    localStorage.removeItem('portfolioId');
+                    localStorage.removeItem('editToken');
+                    window.location.href = '/editor.html';
+                }
+            });
+        }
+        
+        // Sign out button
+        const signOutBtn = document.getElementById('signOutBtn');
+        if (signOutBtn && currentUser) {
+            signOutBtn.style.display = 'block';
+            signOutBtn.addEventListener('click', signOut);
+        }
     }
 
     // Toggle editor panel
@@ -713,14 +732,16 @@
             await saveConfiguration();
         }
         
-        const baseUrl = window.location.origin + window.location.pathname;
-        const shareUrl = `${baseUrl}?id=${currentPortfolioId}`;
-        
-        generatedLink.value = shareUrl;
-        linkResult.style.display = 'block';
-        
-        // Scroll to show the link
-        linkResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // If we just created a new portfolio, the modal was already shown
+        // Otherwise, show the links modal for existing portfolio
+        if (currentPortfolioId && currentEditToken) {
+            showEditLinkModal(currentPortfolioId, currentEditToken);
+        } else if (currentPortfolioId) {
+            // For authenticated users without edit token, just show public link
+            const baseUrl = window.location.origin;
+            const publicLink = `${baseUrl}/p/${currentPortfolioId}`;
+            showPublicLinkModal(publicLink);
+        }
     }
 
     // Save configuration
@@ -1042,6 +1063,7 @@
         
         // Create modal
         const modal = document.createElement('div');
+        modal.id = 'linksModal';
         modal.style.cssText = `
             position: fixed;
             top: 0;
@@ -1065,7 +1087,7 @@
                     <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #0f172a; font-size: 0.9rem;">📱 Public Link (Share this)</label>
                     <div style="display: flex; gap: 8px;">
                         <input type="text" value="${publicLink}" readonly style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem;">
-                        <button onclick="navigator.clipboard.writeText('${publicLink}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
+                        <button class="copy-public-link" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
                     </div>
                 </div>
                 
@@ -1074,7 +1096,7 @@
                     <p style="margin: 0 0 12px 0; font-size: 0.85rem; color: #92400e;">⚠️ Anyone with this link can edit your portfolio. Save it somewhere safe!</p>
                     <div style="display: flex; gap: 8px;">
                         <input type="text" value="${editLink}" readonly style="flex: 1; padding: 10px; border: 1px solid #fbbf24; border-radius: 6px; font-family: monospace; font-size: 0.75rem; background: white;">
-                        <button onclick="navigator.clipboard.writeText('${editLink}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
+                        <button class="copy-edit-link" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
                     </div>
                 </div>
                 
@@ -1084,7 +1106,7 @@
                     </p>
                 </div>
                 
-                <button id="closeModal" style="width: 100%; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                <button class="close-modal-btn" style="width: 100%; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
                     Got it!
                 </button>
             </div>
@@ -1092,8 +1114,80 @@
         
         document.body.appendChild(modal);
         
+        // Copy buttons handlers
+        modal.querySelector('.copy-public-link').addEventListener('click', function() {
+            navigator.clipboard.writeText(publicLink);
+            this.textContent = 'Copied!';
+            setTimeout(() => this.textContent = 'Copy', 2000);
+        });
+        
+        modal.querySelector('.copy-edit-link').addEventListener('click', function() {
+            navigator.clipboard.writeText(editLink);
+            this.textContent = 'Copied!';
+            setTimeout(() => this.textContent = 'Copy', 2000);
+        });
+        
         // Close modal handler
-        document.getElementById('closeModal').addEventListener('click', () => {
+        modal.querySelector('.close-modal-btn').addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+    
+    // Show public link only modal (for authenticated users)
+    function showPublicLinkModal(publicLink) {
+        const modal = document.createElement('div');
+        modal.id = 'publicLinkModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        `;
+        
+        modal.innerHTML = `
+            <div style="background: white; border-radius: 16px; padding: 32px; max-width: 500px; width: 100%;">
+                <h2 style="margin: 0 0 16px 0; color: #0f172a;">🎉 Portfolio Ready!</h2>
+                <p style="margin: 0 0 24px 0; color: #64748b;">Share this link to show your portfolio:</p>
+                
+                <div style="margin-bottom: 24px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 2px solid #e5e7eb;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #0f172a; font-size: 0.9rem;">📱 Public Link</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" value="${publicLink}" readonly style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem;">
+                        <button class="copy-link-btn" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
+                    </div>
+                </div>
+                
+                <button class="close-modal-btn" style="width: 100%; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                    Got it!
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Copy button handler
+        modal.querySelector('.copy-link-btn').addEventListener('click', function() {
+            navigator.clipboard.writeText(publicLink);
+            this.textContent = 'Copied!';
+            setTimeout(() => this.textContent = 'Copy', 2000);
+        });
+        
+        // Close modal handler
+        modal.querySelector('.close-modal-btn').addEventListener('click', () => {
             modal.remove();
         });
         
@@ -1138,18 +1232,6 @@
         });
     }
     
-    // New Portfolio button
-    const newPortfolioBtn = document.getElementById('newPortfolioBtn');
-    if (newPortfolioBtn) {
-        newPortfolioBtn.addEventListener('click', () => {
-            if (confirm('Create a new portfolio? Current unsaved changes will be lost.')) {
-                localStorage.removeItem('portfolioId');
-                localStorage.removeItem('editToken');
-                window.location.href = '/editor.html';
-            }
-        });
-    }
-
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);

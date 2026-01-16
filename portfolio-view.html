@@ -150,22 +150,37 @@
         function renderPortfolio(config) {
             const content = document.getElementById('portfolioContent');
             
-            // Use the same rendering as template.html
-            // For now, we'll use a simple implementation
-            content.innerHTML = `
-                <div class="portfolio-wrapper">
-                    <!-- Include the same structure as template.html -->
-                    <div id="portfolio-root"></div>
-                </div>
-            `;
+            // Create a container similar to template.html
+            content.innerHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${config.name || 'Portfolio'}</title>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+</html>`;
             
-            // Apply configuration
-            window.portfolioConfig = config;
-            
-            // Load template script to render portfolio
-            const script = document.createElement('script');
-            script.src = '/script.js';
-            document.body.appendChild(script);
+            // Apply the configuration and render
+            if (window.renderPortfolio) {
+                window.renderPortfolio(config);
+            } else {
+                // Fallback: simple render
+                const root = content.querySelector('#root');
+                if (root) {
+                    root.innerHTML = `
+                        <div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 40px;">
+                            <div style="text-align: center; color: white;">
+                                <h1 style="font-size: 3rem; margin-bottom: 1rem;">${config.name || 'Portfolio'}</h1>
+                                <p style="font-size: 1.2rem; margin-bottom: 2rem;">${config.title || 'Creative Professional'}</p>
+                                <p style="font-size: 1rem; opacity: 0.9;">${config.description || ''}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
         }
     </script>
 </body>
