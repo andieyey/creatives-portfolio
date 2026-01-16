@@ -6,13 +6,24 @@
     let currentUser = null;
     let userPortfolios = [];
 
-    // Check if URL has parameters (shared portfolio)
+    // Check if URL has parameters (shared portfolio or edit token)
     const urlParams = new URLSearchParams(window.location.search);
     const portfolioId = urlParams.get('id');
+    const editToken = urlParams.get('token');
     const hasSharedConfig = !!portfolioId;
+    const hasEditToken = !!editToken;
     
-    // Store current portfolio ID
+    // Store current portfolio ID and edit token
     let currentPortfolioId = portfolioId || localStorage.getItem('portfolioId') || null;
+    let currentEditToken = editToken || localStorage.getItem('editToken') || null;
+    
+    // Save to localStorage if provided in URL
+    if (portfolioId) {
+        localStorage.setItem('portfolioId', portfolioId);
+    }
+    if (editToken) {
+        localStorage.setItem('editToken', editToken);
+    }
 
     // Initialize authentication and load configuration
     checkAuth().then(() => {
@@ -41,15 +52,20 @@
             console.log('Not authenticated:', error);
         }
         
-        // If not authenticated and not viewing shared portfolio, redirect to sign in
-        if (!hasSharedConfig && !currentUser) {
-            window.location.href = '/auth.html?callbackUrl=' + encodeURIComponent(window.location.href);
-            return false;
+        // Allow anonymous access if user has edit token
+        if (hasEditToken || currentEditToken) {
+            console.log('Anonymous mode with edit token');
+            updateAnonymousUI();
+            return true;
         }
-        return false;
+        
+        // Allow access without authentication (anonymous portfolio creation)
+        console.log('Anonymous mode - new portfolio');
+        updateAnonymousUI();
+        return true;
     }
 
-    // Update user UI
+    // Update user UI for authenticated users
     function updateUserUI() {
         if (currentUser) {
             const userInfo = document.getElementById('userInfo');
@@ -62,6 +78,19 @@
                 userAvatar.src = currentUser.picture || '';
                 userName.textContent = currentUser.name || currentUser.email;
             }
+        }
+    }
+    
+    // Update UI for anonymous users
+    function updateAnonymousUI() {
+        const userInfo = document.getElementById('userInfo');
+        if (userInfo) {
+            userInfo.style.display = 'flex';
+            userInfo.style.alignItems = 'center';
+            userInfo.innerHTML = `
+                <span style="font-size: 0.9rem; color: #64748b; margin-right: 8px;">Anonymous</span>
+                <a href="/auth.html" style="font-size: 0.85rem; color: #6366f1; text-decoration: none;">Sign in to save</a>
+            `;
         }
     }
 
@@ -705,7 +734,8 @@
                 },
                 body: JSON.stringify({
                     portfolioId: currentPortfolioId,
-                    config: currentConfig
+                    config: currentConfig,
+                    editToken: currentEditToken
                 })
             });
 
@@ -713,8 +743,16 @@
                 const data = await response.json();
                 if (data.success && data.portfolioId) {
                     currentPortfolioId = data.portfolioId;
-                    // Store ID in localStorage for persistence
                     localStorage.setItem('portfolioId', currentPortfolioId);
+                    
+                    // Store edit token if this is a new portfolio
+                    if (data.isNew && data.editToken) {
+                        currentEditToken = data.editToken;
+                        localStorage.setItem('editToken', data.editToken);
+                        
+                        // Show edit link modal for first-time save
+                        showEditLinkModal(currentPortfolioId, currentEditToken);
+                    }
                 }
             }
         } catch (error) {
@@ -996,6 +1034,77 @@
         }
     }
     
+    // Show edit link modal for new portfolios
+    function showEditLinkModal(portfolioId, editToken) {
+        const baseUrl = window.location.origin;
+        const publicLink = `${baseUrl}/p/${portfolioId}`;
+        const editLink = `${baseUrl}/editor.html?id=${portfolioId}&token=${editToken}`;
+        
+        // Create modal
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        `;
+        
+        modal.innerHTML = `
+            <div style="background: white; border-radius: 16px; padding: 32px; max-width: 600px; width: 100%;">
+                <h2 style="margin: 0 0 16px 0; color: #0f172a;">🎉 Portfolio Saved!</h2>
+                <p style="margin: 0 0 24px 0; color: #64748b;">Your portfolio has been created. Here are your important links:</p>
+                
+                <div style="margin-bottom: 20px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 2px solid #e5e7eb;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #0f172a; font-size: 0.9rem;">📱 Public Link (Share this)</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" value="${publicLink}" readonly style="flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.85rem;">
+                        <button onclick="navigator.clipboard.writeText('${publicLink}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 24px; padding: 16px; background: #fef3c7; border-radius: 8px; border: 2px solid #fbbf24;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #92400e; font-size: 0.9rem;">✏️ Edit Link (Keep this private!)</label>
+                    <p style="margin: 0 0 12px 0; font-size: 0.85rem; color: #92400e;">⚠️ Anyone with this link can edit your portfolio. Save it somewhere safe!</p>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" value="${editLink}" readonly style="flex: 1; padding: 10px; border: 1px solid #fbbf24; border-radius: 6px; font-family: monospace; font-size: 0.75rem; background: white;">
+                        <button onclick="navigator.clipboard.writeText('${editLink}'); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)" style="padding: 10px 20px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;">Copy</button>
+                    </div>
+                </div>
+                
+                <div style="padding: 16px; background: #e0e7ff; border-radius: 8px; margin-bottom: 24px;">
+                    <p style="margin: 0; font-size: 0.9rem; color: #3730a3;">
+                        💡 <strong>Tip:</strong> Sign in to manage all your portfolios in one place and remove the need for edit links!
+                    </p>
+                </div>
+                
+                <button id="closeModal" style="width: 100%; padding: 14px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;">
+                    Got it!
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close modal handler
+        document.getElementById('closeModal').addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+    
     function renderPortfoliosList() {
         const portfoliosList = document.getElementById('portfoliosList');
         if (!portfoliosList) return;
@@ -1035,6 +1144,7 @@
         newPortfolioBtn.addEventListener('click', () => {
             if (confirm('Create a new portfolio? Current unsaved changes will be lost.')) {
                 localStorage.removeItem('portfolioId');
+                localStorage.removeItem('editToken');
                 window.location.href = '/editor.html';
             }
         });
