@@ -8,6 +8,8 @@
     const editToken = urlParams.get('token');
     const hasSharedConfig = !!portfolioId;
     const hasEditToken = !!editToken;
+    const isPublicView = hasSharedConfig && !hasEditToken; // Public view = has ID but no token
+    const isEditMode = hasSharedConfig && hasEditToken; // Edit mode = has both ID and token
     
     // Store current portfolio ID and edit token
     let currentPortfolioId = portfolioId || localStorage.getItem('portfolioId') || null;
@@ -194,8 +196,8 @@
         onboardingHighlight = document.getElementById('onboardingHighlight');
         restartTourBtn = document.getElementById('restartTourBtn');
         
-        // Show onboarding if first visit and not shared
-        if (!hasSharedConfig && !localStorage.getItem('onboardingCompleted')) {
+        // Show onboarding if first visit and not in public view mode
+        if (!isPublicView && !localStorage.getItem('onboardingCompleted')) {
             setTimeout(() => showOnboarding(), 800);
         } else {
             // Show restart tour button if onboarding was completed
@@ -495,8 +497,9 @@
             renderPortfoliosList();
         }
         
-        // If it's a shared portfolio, completely hide the editor
-        if (hasSharedConfig) {
+        // Hide editor only for public view (ID without token)
+        // If user has edit token, show the editor for editing
+        if (isPublicView) {
             editorPanel.style.display = 'none';
             floatBtn.style.display = 'none';
             document.body.classList.add('editor-collapsed');
@@ -509,7 +512,7 @@
                 badge.textContent = 'Portfolio';
             }
         } else {
-            // Editor is open by default, so ensure body doesn't have collapsed class
+            // Editor is open by default for new portfolios or edit mode
             document.body.classList.remove('editor-collapsed');
             attachEventListeners();
         }
@@ -1225,7 +1228,7 @@
     }
     
     // Load projects when initializing
-    if (projectsList && !hasSharedConfig) {
+    if (projectsList && !isPublicView) {
         loadProjects();
     }
 

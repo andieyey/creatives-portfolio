@@ -98,46 +98,17 @@
     <div id="portfolioContent"></div>
     
     <script>
-        (async function() {
-            try {
-                // Get portfolio ID from URL
-                const pathParts = window.location.pathname.split('/');
-                const portfolioId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
-                
-                if (!portfolioId || portfolioId === 'p') {
-                    showError();
-                    return;
-                }
-                
-                // Fetch portfolio from API
-                const response = await fetch(`/api/get-portfolio?id=${portfolioId}`);
-                
-                if (!response.ok) {
-                    showError();
-                    return;
-                }
-                
-                const data = await response.json();
-                
-                if (!data.config) {
-                    showError();
-                    return;
-                }
-                
-                // Inject portfolio content
-                renderPortfolio(data.config);
-                
-                // Hide loading, show content
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('portfolioContent').style.display = 'block';
-                
-                // Update page title
-                if (data.config.name) {
-                    document.title = `${data.config.name} - Portfolio`;
-                }
-                
-            } catch (error) {
-                console.error('Error loading portfolio:', error);
+        // Simply redirect to editor.html with the ID
+        // This allows the editor.js to handle the view mode properly
+        (function() {
+            const pathParts = window.location.pathname.split('/');
+            const portfolioId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+            
+            if (portfolioId && portfolioId !== 'p') {
+                // Redirect to editor.html with just the ID (no token = public view)
+                window.location.href = `/editor.html?id=${portfolioId}`;
+            } else {
+                // No ID found, show error
                 showError();
             }
         })();
@@ -145,42 +116,6 @@
         function showError() {
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('errorScreen').style.display = 'flex';
-        }
-        
-        function renderPortfolio(config) {
-            const content = document.getElementById('portfolioContent');
-            
-            // Create a container similar to template.html
-            content.innerHTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${config.name || 'Portfolio'}</title>
-</head>
-<body>
-    <div id="root"></div>
-</body>
-</html>`;
-            
-            // Apply the configuration and render
-            if (window.renderPortfolio) {
-                window.renderPortfolio(config);
-            } else {
-                // Fallback: simple render
-                const root = content.querySelector('#root');
-                if (root) {
-                    root.innerHTML = `
-                        <div style="min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; padding: 40px;">
-                            <div style="text-align: center; color: white;">
-                                <h1 style="font-size: 3rem; margin-bottom: 1rem;">${config.name || 'Portfolio'}</h1>
-                                <p style="font-size: 1.2rem; margin-bottom: 2rem;">${config.title || 'Creative Professional'}</p>
-                                <p style="font-size: 1rem; opacity: 0.9;">${config.description || ''}</p>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
         }
     </script>
 </body>
