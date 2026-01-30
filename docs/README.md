@@ -4,7 +4,7 @@
 
 Craftfolio is a free, web-based portfolio builder that lets creatives showcase their work with a clean, modern design. Create, customize, and share your portfolio through an intuitive visual editor.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://craftfolio.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://creatives-craftfolio.vercel.app)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
@@ -26,7 +26,7 @@ Craftfolio is a free, web-based portfolio builder that lets creatives showcase t
 ## 🚀 Quick Start
 
 ### For Users
-1. Visit [Craftfolio](https://craftfolio.vercel.app)
+1. Visit [Craftfolio](https://creatives-craftfolio.vercel.app)
 2. Click "Start Building Free"
 3. Choose a template
 4. Customize with your content
