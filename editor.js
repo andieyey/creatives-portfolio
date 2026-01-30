@@ -621,6 +621,19 @@
         if (darkModeToggle) {
             darkModeToggle.checked = currentConfig.darkMode || false;
         }
+        
+        // Show hero image preview if exists
+        if (currentConfig.heroImage && currentConfig.heroImage.trim() !== '') {
+            const previewContainer = document.getElementById('hero-image-preview');
+            if (previewContainer) {
+                previewContainer.innerHTML = `
+                    <div class="image-preview" style="margin-top: 0.75rem; position: relative;">
+                        <img src="${currentConfig.heroImage}" alt="Hero preview" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px;">
+                        <button class="remove-image" onclick="removeHeroImage()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.8rem;">Remove</button>
+                    </div>
+                `;
+            }
+        }
     }
     
     // Expose for templates
@@ -1135,6 +1148,52 @@
         }
         
         updateProject(projectId);
+    };
+    
+    // Handle hero image upload
+    window.handleHeroImageUpload = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Check file size (warn if > 100KB)
+            if (file.size > 102400) {
+                alert('⚠️ Large images may create URLs that are too long to share.\n\nTip: Use a smaller image or host it online and paste the URL instead.');
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const heroImageInput = document.getElementById('edit-hero-image');
+                heroImageInput.value = e.target.result;
+                
+                // Update config and preview
+                currentConfig.heroImage = e.target.result;
+                applyConfiguration();
+                
+                // Show preview
+                const previewContainer = document.getElementById('hero-image-preview');
+                previewContainer.innerHTML = `
+                    <div class="image-preview" style="margin-top: 0.75rem;">
+                        <img src="${e.target.result}" alt="Hero preview" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px;">
+                        <button class="remove-image" onclick="removeHeroImage()" style="position: absolute; top: 0.5rem; right: 0.5rem; background: rgba(0, 0, 0, 0.7); color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.8rem;">Remove</button>
+                    </div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    window.removeHeroImage = function() {
+        const heroImageInput = document.getElementById('edit-hero-image');
+        heroImageInput.value = '';
+        currentConfig.heroImage = '';
+        applyConfiguration();
+        
+        const previewContainer = document.getElementById('hero-image-preview');
+        previewContainer.innerHTML = '';
+        
+        // Reset file input
+        const fileInput = document.getElementById('hero-image-file');
+        if (fileInput) {
+            fileInput.value = '';
+        }
     };
     
     function updateProjectsInConfig() {

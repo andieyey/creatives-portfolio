@@ -224,6 +224,12 @@
                         <div class="form-group" style="margin-top: 1rem;">
                             <label>Header Image (Optional)</label>
                             <input type="url" id="edit-hero-image" placeholder="https://example.com/image.jpg or leave empty for gradient">
+                            <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
+                                <button type="button" class="btn-upload-hero" onclick="document.getElementById('hero-image-file').click()" style="padding: 0.5rem 1rem; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">📤 Upload Image</button>
+                                <input type="file" id="hero-image-file" accept="image/*" style="display: none;" onchange="handleHeroImageUpload(event)">
+                                <span style="font-size: 0.75rem; color: #64748b;">or paste URL above</span>
+                            </div>
+                            <div id="hero-image-preview"></div>
                         </div>
                     </div>
                 </div>
