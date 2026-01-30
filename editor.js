@@ -901,7 +901,7 @@
         } else if (currentPortfolioId) {
             // For authenticated users without edit token, just show public link
             const baseUrl = window.location.origin;
-            const publicLink = `${baseUrl}/p/${currentPortfolioId}`;
+            const publicLink = `${baseUrl}/editor.html?id=${currentPortfolioId}`;
             showPublicLinkModal(publicLink);
         }
     }
@@ -1266,7 +1266,7 @@
     // Show edit link modal for new portfolios
     function showEditLinkModal(portfolioId, editToken) {
         const baseUrl = window.location.origin;
-        const publicLink = `${baseUrl}/p/${portfolioId}`;
+        const publicLink = `${baseUrl}/editor.html?id=${portfolioId}`;
         const editLink = `${baseUrl}/editor.html?id=${portfolioId}&token=${editToken}`;
         
         // Create modal
