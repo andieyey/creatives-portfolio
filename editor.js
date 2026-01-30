@@ -21,11 +21,72 @@
         localStorage.setItem('editToken', editToken);
     }
 
-    // Initialize configuration loading
-    loadConfiguration().then(config => {
-        currentConfig = config;
+    // Declare variables that will be initialized after DOM is ready
+    let currentConfig = null;
+    let currentUser = null;
+    let userPortfolios = [];
+    let editorPanel, editorToggle, floatBtn, openEditorBtn, saveConfigBtn;
+    let generateLinkBtn, downloadConfigBtn, resetConfigBtn, copyLinkBtn;
+    let linkResult, generatedLink, saveNotification;
+    let inputs = {};
+    let addProjectBtn, projectsList;
+    let projects = [];
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Now query all DOM elements
+        editorPanel = document.getElementById('editorPanel');
+        editorToggle = document.getElementById('editorToggle');
+        floatBtn = document.getElementById('floatBtn');
+        openEditorBtn = document.getElementById('openEditor');
+        saveConfigBtn = document.getElementById('saveConfig');
+        generateLinkBtn = document.getElementById('generateLink');
+        downloadConfigBtn = document.getElementById('downloadConfig');
+        resetConfigBtn = document.getElementById('resetConfig');
+        copyLinkBtn = document.getElementById('copyLink');
+        linkResult = document.getElementById('linkResult');
+        generatedLink = document.getElementById('generatedLink');
+        saveNotification = document.getElementById('saveNotification');
+
+        // Form inputs
+        inputs = {
+            name: document.getElementById('edit-name'),
+            title: document.getElementById('edit-title'),
+            description: document.getElementById('edit-description'),
+            aboutHeading: document.getElementById('edit-about-heading'),
+            bio1: document.getElementById('edit-bio1'),
+            bio2: document.getElementById('edit-bio2'),
+            skills: document.getElementById('edit-skills'),
+            email: document.getElementById('edit-email'),
+            phone: document.getElementById('edit-phone'),
+            location: document.getElementById('edit-location'),
+            primaryColor: document.getElementById('edit-primary-color'),
+            secondaryColor: document.getElementById('edit-secondary-color'),
+            textColor: document.getElementById('edit-text-color'),
+            bgColor: document.getElementById('edit-bg-color'),
+            heroColor1: document.getElementById('edit-hero-color1'),
+            heroColor2: document.getElementById('edit-hero-color2'),
+            heroImage: document.getElementById('edit-hero-image')
+        };
+
+        // Projects management
+        addProjectBtn = document.getElementById('addProjectBtn');
+        projectsList = document.getElementById('projectsList');
+        
+        if (addProjectBtn) {
+            addProjectBtn.addEventListener('click', addNewProject);
+        }
+
+        // Load configuration and initialize
+        currentConfig = await loadConfiguration();
         window.currentConfig = currentConfig;
+        await checkAuth();
         init();
+        
+        // Set up UI after init
+        setupOnboarding();
+        setupTabs();
+        setupColorListeners();
     });
 
     // Check authentication status
@@ -103,14 +164,9 @@
         }
     }
 
-    // Load configuration from database or localStorage or default
-    let currentConfig = null;
-
     // Onboarding
     let currentStep = 0;
-    const onboardingTooltip = document.getElementById('onboardingTooltip');
-    const onboardingHighlight = document.getElementById('onboardingHighlight');
-    const restartTourBtn = document.getElementById('restartTourBtn');
+    let onboardingTooltip, onboardingHighlight, restartTourBtn;
     
     const onboardingSteps = [
         {
@@ -133,14 +189,19 @@
         }
     ];
 
-    
-    // Show onboarding if first visit and not shared
-    if (!hasSharedConfig && !localStorage.getItem('onboardingCompleted')) {
-        setTimeout(() => showOnboarding(), 800);
-    } else {
-        // Show restart tour button if onboarding was completed
-        if (localStorage.getItem('onboardingCompleted') && restartTourBtn) {
-            restartTourBtn.classList.remove('hidden');
+    function setupOnboarding() {
+        onboardingTooltip = document.getElementById('onboardingTooltip');
+        onboardingHighlight = document.getElementById('onboardingHighlight');
+        restartTourBtn = document.getElementById('restartTourBtn');
+        
+        // Show onboarding if first visit and not shared
+        if (!hasSharedConfig && !localStorage.getItem('onboardingCompleted')) {
+            setTimeout(() => showOnboarding(), 800);
+        } else {
+            // Show restart tour button if onboarding was completed
+            if (localStorage.getItem('onboardingCompleted') && restartTourBtn) {
+                restartTourBtn.classList.remove('hidden');
+            }
         }
     }
     
@@ -278,37 +339,40 @@
     };
 
     // Tab functionality
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabName = btn.dataset.tab;
-            
-            // Update buttons
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Update content
-            tabContents.forEach(content => {
-                if (content.dataset.content === tabName) {
-                    content.classList.add('active');
-                } else {
-                    content.classList.remove('active');
-                }
+    function setupTabs() {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.dataset.tab;
+                
+                // Update buttons
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Update content
+                tabContents.forEach(content => {
+                    if (content.dataset.content === tabName) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
             });
         });
-    });
+    }
     
     // Color input listeners
-    const primaryColorInput = document.getElementById('edit-primary-color');
-    const secondaryColorInput = document.getElementById('edit-secondary-color');
-    const textColorInput = document.getElementById('edit-text-color');
-    const bgColorInput = document.getElementById('edit-bg-color');
-    const heroColor1Input = document.getElementById('edit-hero-color1');
-    const heroColor2Input = document.getElementById('edit-hero-color2');
-    const heroImageInput = document.getElementById('edit-hero-image');
-    const darkModeToggle = document.getElementById('darkModeToggle');
+    function setupColorListeners() {
+        const primaryColorInput = document.getElementById('edit-primary-color');
+        const secondaryColorInput = document.getElementById('edit-secondary-color');
+        const textColorInput = document.getElementById('edit-text-color');
+        const bgColorInput = document.getElementById('edit-bg-color');
+        const heroColor1Input = document.getElementById('edit-hero-color1');
+        const heroColor2Input = document.getElementById('edit-hero-color2');
+        const heroImageInput = document.getElementById('edit-hero-image');
+        const darkModeToggle = document.getElementById('darkModeToggle');
     
     if (primaryColorInput) {
         const primaryValue = primaryColorInput.nextElementSibling;
@@ -418,50 +482,7 @@
             applyConfiguration();
         });
     }
-
-    // Editor elements
-    const editorPanel = document.getElementById('editorPanel');
-    const editorToggle = document.getElementById('editorToggle');
-    const floatBtn = document.getElementById('floatBtn');
-    const openEditorBtn = document.getElementById('openEditor');
-    const saveConfigBtn = document.getElementById('saveConfig');
-    const generateLinkBtn = document.getElementById('generateLink');
-    const downloadConfigBtn = document.getElementById('downloadConfig');
-    const resetConfigBtn = document.getElementById('resetConfig');
-    const copyLinkBtn = document.getElementById('copyLink');
-    const linkResult = document.getElementById('linkResult');
-    const generatedLink = document.getElementById('generatedLink');
-    const saveNotification = document.getElementById('saveNotification');
-
-    // Form inputs
-    const inputs = {
-        name: document.getElementById('edit-name'),
-        title: document.getElementById('edit-title'),
-        description: document.getElementById('edit-description'),
-        aboutHeading: document.getElementById('edit-about-heading'),
-        bio1: document.getElementById('edit-bio1'),
-        bio2: document.getElementById('edit-bio2'),
-        skills: document.getElementById('edit-skills'),
-        email: document.getElementById('edit-email'),
-        phone: document.getElementById('edit-phone'),
-        location: document.getElementById('edit-location'),
-        primaryColor: document.getElementById('edit-primary-color'),
-        secondaryColor: document.getElementById('edit-secondary-color'),
-        textColor: document.getElementById('edit-text-color'),
-        bgColor: document.getElementById('edit-bg-color'),
-        heroColor1: document.getElementById('edit-hero-color1'),
-        heroColor2: document.getElementById('edit-hero-color2'),
-        heroImage: document.getElementById('edit-hero-image')
-    };
-
-    // Projects management
-    const addProjectBtn = document.getElementById('addProjectBtn');
-    const projectsList = document.getElementById('projectsList');
-    let projects = [];
-    
-    if (addProjectBtn) {
-        addProjectBtn.addEventListener('click', addNewProject);
-    }
+    } // End of setupColorListeners
 
     // Initialize
     function init() {
