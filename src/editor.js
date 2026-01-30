@@ -867,7 +867,7 @@
                 if (confirm('Create a new portfolio? Current unsaved changes will be lost.')) {
                     localStorage.removeItem('portfolioId');
                     localStorage.removeItem('editToken');
-                    window.location.href = '/editor.html';
+                    window.location.href = 'editor.html';
                 }
             });
         }
@@ -901,7 +901,7 @@
         } else if (currentPortfolioId) {
             // For authenticated users without edit token, just show public link
             const baseUrl = window.location.origin;
-            const publicLink = `${baseUrl}/editor.html?id=${currentPortfolioId}`;
+            const publicLink = `${baseUrl}/src/editor.html?id=${currentPortfolioId}`;
             showPublicLinkModal(publicLink);
         }
     }
@@ -1266,8 +1266,8 @@
     // Show edit link modal for new portfolios
     function showEditLinkModal(portfolioId, editToken) {
         const baseUrl = window.location.origin;
-        const publicLink = `${baseUrl}/editor.html?id=${portfolioId}`;
-        const editLink = `${baseUrl}/editor.html?id=${portfolioId}&token=${editToken}`;
+        const publicLink = `${baseUrl}/src/editor.html?id=${portfolioId}`;
+        const editLink = `${baseUrl}/src/editor.html?id=${portfolioId}&token=${editToken}`;
         
         // Create modal
         const modal = document.createElement('div');
@@ -1429,7 +1429,7 @@
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                window.location.href = `/editor.html?id=${id}`;
+                window.location.href = `editor.html?id=${id}`;
             });
         });
     }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Craftfolio</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -106,7 +106,7 @@
             
             if (portfolioId && portfolioId !== 'p') {
                 // Redirect to editor.html with just the ID (no token = public view)
-                window.location.href = `/editor.html?id=${portfolioId}`;
+                window.location.href = `editor.html?id=${portfolioId}`;
             } else {
                 // No ID found, show error
                 showError();
