@@ -1,4 +1,4 @@
-# 🎨 Craftfolio
+# 🎨 Craftfolio - currently PAUSED
 
 **Build your professional portfolio in minutes—no coding required.**
 
